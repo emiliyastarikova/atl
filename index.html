@@ -354,6 +354,29 @@
 <!-- End paper abstract -->
 
 
+<!-- Dataset histogram -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Dataset distribution</h2>
+        <div class="content">
+          <p>
+            Distribution of annotations by finding type in the MammoBench dataset.
+          </p>
+        </div>
+
+        <div style="position: relative; width: 100%; min-height: 420px;">
+          <canvas id="datasetHistogram" aria-label="Dataset class distribution"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End dataset histogram -->
+
+
+
 <!-- Image carousel -->
 <section class="hero is-small">
   <div class="hero-body">
@@ -519,5 +542,80 @@
 
     <!-- End of Statcounter Code -->
 
-  </body>
+  
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+<script>
+  const histogramElement = document.getElementById("datasetHistogram");
+
+  if (histogramElement) {
+    new Chart(histogramElement, {
+      type: "bar",
+      data: {
+        // Change category names here.
+        labels: [
+          "Mass",
+          "Calcification",
+          "Architectural distortion",
+          "Asymmetry"
+        ],
+        datasets: [
+          {
+            label: "Number of annotations",
+
+            // Change histogram values here.
+            data: [1250, 830, 315, 270],
+
+            backgroundColor: "rgba(37, 99, 235, 0.72)",
+            borderColor: "rgb(37, 99, 235)",
+            borderWidth: 1,
+            borderRadius: 6,
+            maxBarThickness: 90
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return "Annotations: " + context.parsed.y;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: "Finding type"
+            },
+            grid: {
+              display: false
+            }
+          },
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "Number of annotations"
+            },
+            ticks: {
+              precision: 0
+            }
+          }
+        }
+      }
+    });
+  }
+</script>
+
+
+</body>
   </html>
