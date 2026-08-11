@@ -613,6 +613,9 @@
     }
   };
 
+  // Одинаковая высота области подписей по X
+  const commonXAxisHeight = 100;
+
 
   // =========================
   // Findings histogram
@@ -685,6 +688,11 @@
               autoSkip: false,
               maxRotation: 55,
               minRotation: 55
+            },
+
+            // ВАЖНО: фиксируем высоту X-axis
+            afterFit: function(scale) {
+              scale.height = commonXAxisHeight;
             }
           },
 
@@ -759,6 +767,15 @@
           x: {
             grid: {
               display: false
+            },
+
+            ticks: {
+              autoSkip: false
+            },
+
+            // ВАЖНО: такая же высота X-axis
+            afterFit: function(scale) {
+              scale.height = commonXAxisHeight;
             }
           },
 
