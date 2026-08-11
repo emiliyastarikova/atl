@@ -343,12 +343,12 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <!-- TODO: Replace with your paper abstract -->
-          <p>
-            MammoAtlas a large-scale mammography dataset with pixel-level annotations for 9 findings, breast-level ACR density and BI-RADS assessment, distributed with original DICOM images and DICOM SEG annotations.
           </p>
           <p style="font-size: 1.2rem; text-align: center;">
             <strong>X patients · X studies · X mammograms · 9 findings · X masks · DICOM SEG</strong>
           </p>
+          <p>
+            MammoAtlas a large-scale mammography dataset with pixel-level annotations for 9 findings, breast-level ACR density and BI-RADS assessment, distributed with original DICOM images and DICOM SEG annotations.
         </div>
       </div>
     </div>
@@ -415,7 +415,7 @@
 
         <div style="position: relative; width: 100%; min-height: 420px;">
           <canvas
-            id="datasetHistogram"
+            id="datasetHistogram2"
             aria-label="BI-RADS distribution">
           </canvas>
         </div>
@@ -600,6 +600,81 @@
 
 <script>
   const histogramElement = document.getElementById("datasetHistogram");
+
+  if (histogramElement) {
+    new Chart(histogramElement, {
+      type: "bar",
+      data: {
+        // Change category names here.
+        labels: [
+          "Mass",
+          "Calcification",
+          "Architectural distortion",
+          "Asymmetry",
+          "Lymph node",
+          "Local asymmetry",
+          "Nipple retraction",
+          "Skin retraction",
+          "Skin thickening"
+        ],
+        datasets: [
+          {
+            label: "Number of annotations",
+
+            // Change histogram values here.
+            data: [2345, 830, 315, 270, 43, 453, 4, 53, 543],
+
+            backgroundColor: "rgba(37, 99, 235, 0.72)",
+            borderColor: "rgb(37, 99, 235)",
+            borderWidth: 1,
+            borderRadius: 6,
+            maxBarThickness: 90
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return "Annotations: " + context.parsed.y;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: "Findings"
+            },
+            grid: {
+              display: false
+            }
+          },
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "Number of findings"
+            },
+            ticks: {
+              precision: 0
+            }
+          }
+        }
+      }
+    });
+  }
+</script>
+
+<script>
+  const histogramElement = document.getElementById("datasetHistogram2");
 
   if (histogramElement) {
     new Chart(histogramElement, {
