@@ -386,36 +386,36 @@
       <h2 class="title is-3">Dataset distribution</h2>
       <div class="content">
         <p>
-          Distribution of annotations and metadata in the MammoAtlas dataset.
+          Distribution of findings and BI-RADS categories in the MammoAtlas dataset.
         </p>
       </div>
     </div>
 
-    <div class="columns">
+    <div class="columns is-variable is-5">
 
-      <!-- Histogram 1 -->
+      <!-- Findings histogram -->
       <div class="column is-half">
         <h3 class="title is-5 has-text-centered">
           Findings
         </h3>
 
-        <div style="position: relative; width: 100%; min-height: 420px;">
+        <div style="position: relative; width: 100%; height: 420px;">
           <canvas
             id="datasetHistogram"
-            aria-label="Dataset class distribution">
+            aria-label="Dataset findings distribution">
           </canvas>
         </div>
       </div>
 
-      <!-- Histogram 2 -->
+      <!-- BI-RADS histogram -->
       <div class="column is-half">
         <h3 class="title is-5 has-text-centered">
-          BI-RADS distribution
+          BI-RADS
         </h3>
 
-        <div style="position: relative; width: 100%; min-height: 420px;">
+        <div style="position: relative; width: 100%; height: 420px;">
           <canvas
-            id="datasetHistogram2"
+            id="biradsHistogram"
             aria-label="BI-RADS distribution">
           </canvas>
         </div>
@@ -426,7 +426,6 @@
   </div>
 </section>
 <!-- End dataset histograms -->
-
 
 
 <!-- Image carousel -->
@@ -599,13 +598,17 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
 <script>
-  const histogramElement = document.getElementById("datasetHistogram");
+  // =========================
+  // Findings histogram
+  // =========================
 
-  if (histogramElement) {
-    new Chart(histogramElement, {
+  const findingsCanvas = document.getElementById("datasetHistogram");
+
+  if (findingsCanvas) {
+    new Chart(findingsCanvas, {
       type: "bar",
+
       data: {
-        // Change category names here.
         labels: [
           "Mass",
           "Calcification",
@@ -617,52 +620,66 @@
           "Skin retraction",
           "Skin thickening"
         ],
-        datasets: [
-          {
-            label: "Number of annotations",
 
-            // Change histogram values here.
-            data: [2345, 830, 315, 270, 43, 453, 4, 53, 543],
+        datasets: [{
+          data: [
+            2345,
+            830,
+            315,
+            270,
+            43,
+            453,
+            4,
+            53,
+            543
+          ],
 
-            backgroundColor: "rgba(37, 99, 235, 0.72)",
-            borderColor: "rgb(37, 99, 235)",
-            borderWidth: 1,
-            borderRadius: 6,
-            maxBarThickness: 90
-          }
-        ]
+          backgroundColor: "rgba(37, 99, 235, 0.72)",
+          borderColor: "rgb(37, 99, 235)",
+          borderWidth: 1,
+          borderRadius: 5
+        }]
       },
+
       options: {
         responsive: true,
         maintainAspectRatio: false,
+
         plugins: {
           legend: {
             display: false
           },
+
           tooltip: {
             callbacks: {
               label: function(context) {
-                return "Annotations: " + context.parsed.y;
+                return "Findings: " + context.parsed.y;
               }
             }
           }
         },
+
         scales: {
           x: {
-            title: {
-              display: true,
-              text: "Findings"
-            },
             grid: {
               display: false
+            },
+
+            ticks: {
+              autoSkip: false,
+              maxRotation: 55,
+              minRotation: 55
             }
           },
+
           y: {
             beginAtZero: true,
+
             title: {
               display: true,
               text: "Number of findings"
             },
+
             ticks: {
               precision: 0
             }
@@ -671,74 +688,77 @@
       }
     });
   }
-</script>
-    
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-<script>
-  const histogramElement = document.getElementById("datasetHistogram2");
 
-  if (histogramElement) {
-    new Chart(histogramElement, {
+
+  // =========================
+  // BI-RADS histogram
+  // =========================
+
+  const biradsCanvas = document.getElementById("biradsHistogram");
+
+  if (biradsCanvas) {
+    new Chart(biradsCanvas, {
       type: "bar",
+
       data: {
-        // Change category names here.
         labels: [
-          "Mass",
-          "Calcification",
-          "Architectural distortion",
-          "Asymmetry",
-          "Lymph node",
-          "Local asymmetry",
-          "Nipple retraction",
-          "Skin retraction",
-          "Skin thickening"
+          "BI-RADS 1",
+          "BI-RADS 2",
+          "BI-RADS 3",
+          "BI-RADS 4",
+          "BI-RADS 5"
         ],
-        datasets: [
-          {
-            label: "Number of annotations",
 
-            // Change histogram values here.
-            data: [2345, 830, 315, 270, 43, 453, 4, 53, 543],
+        datasets: [{
+          // Replace with real values
+          data: [
+            1200,
+            1800,
+            650,
+            430,
+            120
+          ],
 
-            backgroundColor: "rgba(37, 99, 235, 0.72)",
-            borderColor: "rgb(37, 99, 235)",
-            borderWidth: 1,
-            borderRadius: 6,
-            maxBarThickness: 90
-          }
-        ]
+          backgroundColor: "rgba(37, 99, 235, 0.72)",
+          borderColor: "rgb(37, 99, 235)",
+          borderWidth: 1,
+          borderRadius: 5
+        }]
       },
+
       options: {
         responsive: true,
         maintainAspectRatio: false,
+
         plugins: {
           legend: {
             display: false
           },
+
           tooltip: {
             callbacks: {
               label: function(context) {
-                return "Annotations: " + context.parsed.y;
+                return "Breasts: " + context.parsed.y;
               }
             }
           }
         },
+
         scales: {
           x: {
-            title: {
-              display: true,
-              text: "Findings"
-            },
             grid: {
               display: false
             }
           },
+
           y: {
             beginAtZero: true,
+
             title: {
               display: true,
-              text: "Number of findings"
+              text: "Number of breasts"
             },
+
             ticks: {
               precision: 0
             }
