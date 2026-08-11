@@ -423,6 +423,38 @@
 
     </div>
 
+    <div class="columns is-variable is-5">
+
+      <!-- Findings histogram -->
+      <div class="column is-half">
+        <h3 class="title is-5 has-text-centered">
+          By quantity
+        </h3>
+
+        <div style="position: relative; width: 100%; height: 420px;">
+          <canvas
+            id="BIRADS"
+            aria-label="Dataset findings distribution">
+          </canvas>
+        </div>
+      </div>
+
+      <!-- BI-RADS histogram -->
+      <div class="column is-half">
+        <h3 class="title is-5 has-text-centered">
+          By unique finding
+        </h3>
+
+        <div style="position: relative; width: 100%; height: 420px;">
+          <canvas
+            id="ACR"
+            aria-label="BI-RADS distribution">
+          </canvas>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 </section>
 <!-- End dataset histograms -->
@@ -801,6 +833,191 @@
       }
     });
   }
+
+  // =========================
+  // BIRADS histogram
+  // =========================
+
+  const findingsCanvas = document.getElementById("BIRADS");
+
+  if (BIRADS) {
+    new Chart(BIRADS, {
+      type: "bar",
+
+      data: {
+        labels: [
+          "Mass",
+          "Calcification",
+          "Architectural distortion",
+          "Asymmetry",
+          "Lymph node",
+          "Local asymmetry",
+          "Nipple retraction",
+          "Skin retraction",
+          "Skin thickening"
+        ],
+
+        datasets: [{
+          data: [
+            2345,
+            830,
+            315,
+            270,
+            43,
+            453,
+            4,
+            53,
+            543
+          ],
+
+          backgroundColor: "rgba(37, 99, 235, 0.72)",
+          borderColor: "rgb(37, 99, 235)",
+          borderWidth: 1,
+          borderRadius: 5
+        }]
+      },
+
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        plugins: {
+          legend: {
+            display: false
+          },
+
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return "Findings: " + context.parsed.y;
+              }
+            }
+          }
+        },
+
+        scales: {
+          x: {
+            grid: {
+              display: false
+            },
+
+            ticks: {
+              autoSkip: false,
+              maxRotation: 55,
+              minRotation: 55
+            },
+
+            // ВАЖНО: фиксируем высоту X-axis
+            afterFit: function(scale) {
+              scale.height = commonXAxisHeight;
+            }
+          },
+
+          y: {
+            ...commonYScale,
+
+            title: {
+              display: true,
+              text: "Number of findings"
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // =========================
+  // BIRADS histogram
+  // =========================
+
+  const findingsCanvas = document.getElementById("ACR");
+
+  if (ACR) {
+    new Chart(ACR, {
+      type: "bar",
+
+      data: {
+        labels: [
+          "Mass",
+          "Calcification",
+          "Architectural distortion",
+          "Asymmetry",
+          "Lymph node",
+          "Local asymmetry",
+          "Nipple retraction",
+          "Skin retraction",
+          "Skin thickening"
+        ],
+
+        datasets: [{
+          data: [
+            2345,
+            830,
+            315,
+            270,
+            43,
+            453,
+            4,
+            53,
+            543
+          ],
+
+          backgroundColor: "rgba(37, 99, 235, 0.72)",
+          borderColor: "rgb(37, 99, 235)",
+          borderWidth: 1,
+          borderRadius: 5
+        }]
+      },
+
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        plugins: {
+          legend: {
+            display: false
+          },
+
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return "Findings: " + context.parsed.y;
+              }
+            }
+          }
+        },
+
+        scales: {
+          x: {
+            grid: {
+              display: false
+            },
+
+            ticks: {
+              autoSkip: false,
+              maxRotation: 55,
+              minRotation: 55
+            },
+
+            // ВАЖНО: фиксируем высоту X-axis
+            afterFit: function(scale) {
+              scale.height = commonXAxisHeight;
+            }
+          },
+
+          y: {
+            ...commonYScale,
+
+            title: {
+              display: true,
+              text: "Number of findings"
+            }
+          }
+        }
+      }
+    });
+  }
+
 
 </script>
 
