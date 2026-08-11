@@ -415,7 +415,7 @@
 
         <div style="position: relative; width: 100%; height: 420px;">
           <canvas
-            id="datasetHistogram"
+            id="biradsHistogram"
             aria-label="BI-RADS distribution">
           </canvas>
         </div>
@@ -719,23 +719,31 @@
   if (biradsCanvas) {
     new Chart(biradsCanvas, {
       type: "bar",
-
+      
       data: {
         labels: [
-          "BI-RADS 1",
-          "BI-RADS 2",
-          "BI-RADS 3",
-          "BI-RADS 4",
-          "BI-RADS 5"
+          "Mass",
+          "Calcification",
+          "Architectural distortion",
+          "Asymmetry",
+          "Lymph node",
+          "Local asymmetry",
+          "Nipple retraction",
+          "Skin retraction",
+          "Skin thickening"
         ],
 
         datasets: [{
           data: [
-            1200,
-            1800,
-            650,
-            430,
-            120
+            2345,
+            830,
+            315,
+            270,
+            43,
+            453,
+            4,
+            53,
+            543
           ],
 
           backgroundColor: "rgba(37, 99, 235, 0.72)",
@@ -757,7 +765,7 @@
           tooltip: {
             callbacks: {
               label: function(context) {
-                return "Breasts: " + context.parsed.y;
+                return "Findings: " + context.parsed.y;
               }
             }
           }
@@ -770,10 +778,12 @@
             },
 
             ticks: {
-              autoSkip: false
+              autoSkip: false,
+              maxRotation: 55,
+              minRotation: 55
             },
 
-            // ВАЖНО: такая же высота X-axis
+            // ВАЖНО: фиксируем высоту X-axis
             afterFit: function(scale) {
               scale.height = commonXAxisHeight;
             }
@@ -784,13 +794,14 @@
 
             title: {
               display: true,
-              text: "Number of breasts"
+              text: "Number of findings"
             }
           }
         }
       }
     });
   }
+
 </script>
 
 
