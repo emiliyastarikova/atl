@@ -838,10 +838,10 @@
   // BIRADS histogram
   // =========================
 
-  const findingsCanvas = document.getElementById("BIRADS");
+  const BIRADSCanvas = document.getElementById("BIRADS");
 
-  if (BIRADS) {
-    new Chart(BIRADS, {
+  if (BIRADSCanvas) {
+    new Chart(BIRADSCanvas, {
       type: "bar",
 
       data: {
@@ -930,10 +930,10 @@
   // BIRADS histogram
   // =========================
 
-  const findingsCanvas = document.getElementById("ACR");
+  const acrCanvas = document.getElementById("ACR");
 
-  if (ACR) {
-    new Chart(ACR, {
+  if (acrCanvas) {
+    new Chart(acrCanvas, {
       type: "bar",
 
       data: {
