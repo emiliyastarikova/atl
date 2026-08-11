@@ -599,6 +599,22 @@
 
 <script>
   // =========================
+  // Common Y-axis settings
+  // =========================
+
+  const commonYScale = {
+    beginAtZero: true,
+    min: 0,
+    max: 2500,
+
+    ticks: {
+      stepSize: 500,
+      precision: 0
+    }
+  };
+
+
+  // =========================
   // Findings histogram
   // =========================
 
@@ -673,15 +689,11 @@
           },
 
           y: {
-            beginAtZero: true,
+            ...commonYScale,
 
             title: {
               display: true,
               text: "Number of findings"
-            },
-
-            ticks: {
-              precision: 0
             }
           }
         }
@@ -710,7 +722,6 @@
         ],
 
         datasets: [{
-          // Replace with real values
           data: [
             1200,
             1800,
@@ -752,15 +763,11 @@
           },
 
           y: {
-            beginAtZero: true,
+            ...commonYScale,
 
             title: {
               display: true,
               text: "Number of breasts"
-            },
-
-            ticks: {
-              precision: 0
             }
           }
         }
