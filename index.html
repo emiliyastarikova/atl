@@ -1020,91 +1020,153 @@
       }
     });
   }
-  // =========================
-  // datasets histogram
-  // =========================
+// =========================
+// datasets histogram
+// =========================
 
-  const datasetsCanvas = document.getElementById("datasets");
+const datasetsCanvas = document.getElementById("datasets");
 
-  if (datasetsCanvas) {
-    new Chart(datasetsCanvas, {
-      type: "bar",
+if (datasetsCanvas) {
+  new Chart(datasetsCanvas, {
+    type: "bar",
 
-      data: {
-        labels: [
-          "NLBS",
-          "INbreast",
-          "CMMD",
-          "CSOW-CC"
-        ],
+    data: {
+      labels: [
+        "NLBS",
+        "INbreast",
+        "CMMD",
+        "CSOW-CC"
+      ],
 
-        datasets: [{
+      datasets: [
+        // =========================
+        // Total number of studies
+        // BACKGROUND
+        // =========================
+        {
+          label: "Total studies",
+
+          data: [
+            3000,
+            1200,
+            800,
+            600
+          ],
+
+          backgroundColor: "rgba(37, 99, 235, 0.18)",
+          borderColor: "rgba(37, 99, 235, 0.30)",
+          borderWidth: 1,
+          borderRadius: 6,
+
+          // широкий столбец
+          barPercentage: 0.85,
+          categoryPercentage: 0.8,
+
+          grouped: false,
+
+          // рисуем первым — на заднем плане
+          order: 2
+        },
+
+        // =========================
+        // Studies included in MammoAtlas
+        // FOREGROUND
+        // =========================
+        {
+          label: "Included in MammoAtlas",
+
           data: [
             2345,
             830,
             315,
-            270,
+            270
           ],
 
-          backgroundColor: "rgba(37, 99, 235, 0.72)",
+          backgroundColor: "rgba(37, 99, 235, 0.78)",
           borderColor: "rgb(37, 99, 235)",
           borderWidth: 1,
-          borderRadius: 5
-        }]
-      },
+          borderRadius: 6,
 
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
+          // более узкий передний столбец
+          barPercentage: 0.55,
+          categoryPercentage: 0.8,
 
-        plugins: {
-          legend: {
-            display: false
-          },
+          grouped: false,
 
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return "Findings: " + context.parsed.y;
-              }
+          // рисуем поверх
+          order: 1
+        }
+      ]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: {
+          display: true,
+          position: "top",
+
+          labels: {
+            usePointStyle: true,
+            pointStyle: "rectRounded",
+
+            font: {
+              size: 14,
+              weight: "bold"
             }
           }
         },
 
-        scales: {
-          x: {
-            grid: {
-              display: false
-            },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ": " + context.parsed.y;
+            }
+          }
+        }
+      },
 
-            ticks: {
-              autoSkip: false,
-              maxRotation: 0,
-              minRotation: 0
-            },
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
+
+          ticks: {
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0,
+
             font: {
               size: 16,
               weight: "bold"
             }
+          }
+        },
 
-            // ВАЖНО: фиксируем высоту X-axis
-            //afterFit: function(scale) {
-            //  scale.height = commonXAxisHeight;
-           // }
+        y: {
+          beginAtZero: true,
+
+          title: {
+            display: true,
+            text: "Number of studies",
+
+            font: {
+              size: 14,
+              weight: "bold"
+            }
           },
 
-          y: {
-            ...commonYScale,
-
-            title: {
-              display: true,
-              text: "Number of findings"
-            }
+          ticks: {
+            precision: 0
           }
         }
       }
-    });
-  }
+    }
+  });
+}
 
 
 </script>
