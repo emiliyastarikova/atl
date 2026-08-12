@@ -356,27 +356,7 @@
 </section>
 <!-- End paper abstract -->
 
-<!-- Dataset histogram -->
-<!--
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Dataset distribution</h2>
-        <div class="content">
-          <p>
-            Distribution of annotations by finding type in the MammoAtlas dataset.
-          </p>
-        </div>
 
-        <div style="position: relative; width: 100%; min-height: 420px;">
-          <canvas id="datasetHistogram" aria-label="Dataset class distribution"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- End dataset histogram -->
 
 
 <!-- Image carousel -->
@@ -418,6 +398,27 @@
 </div>
 </section>
 <!-- End image carousel -->
+
+<!-- Dataset histogram -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Data sources</h2>
+        <div class="content">
+          <p>
+            Data sources.
+          </p>
+        </div>
+
+        <div style="position: relative; width: 100%; min-height: 420px;">
+          <canvas id="datasets" aria-label="Dataset class distribution"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End dataset histogram -->
 
 <!-- Dataset histograms -->
 <section class="section">
@@ -1005,6 +1006,97 @@
             afterFit: function(scale) {
               scale.height = commonXAxisHeight;
             }
+          },
+
+          y: {
+            ...commonYScale,
+
+            title: {
+              display: true,
+              text: "Number of findings"
+            }
+          }
+        }
+      }
+    });
+  }
+  // =========================
+  // datasets histogram
+  // =========================
+
+  const datasetsCanvas = document.getElementById("datasets");
+
+  if (datasetsCanvas) {
+    new Chart(datasetsCanvas, {
+      type: "bar",
+
+      data: {
+        labels: [
+          "Mass",
+          "Calcification",
+          "Architectural distortion",
+          "Asymmetry",
+          "Lymph node",
+          "Local asymmetry",
+          "Nipple retraction",
+          "Skin retraction",
+          "Skin thickening"
+        ],
+
+        datasets: [{
+          data: [
+            2345,
+            830,
+            315,
+            270,
+            43,
+            453,
+            4,
+            53,
+            543
+          ],
+
+          backgroundColor: "rgba(37, 99, 235, 0.72)",
+          borderColor: "rgb(37, 99, 235)",
+          borderWidth: 1,
+          borderRadius: 5
+        }]
+      },
+
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        plugins: {
+          legend: {
+            display: false
+          },
+
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return "Findings: " + context.parsed.y;
+              }
+            }
+          }
+        },
+
+        scales: {
+          x: {
+            grid: {
+              display: false
+            },
+
+            ticks: {
+              autoSkip: false,
+              maxRotation: 55,
+              minRotation: 55
+            },
+
+            // ВАЖНО: фиксируем высоту X-axis
+            //afterFit: function(scale) {
+            //  scale.height = commonXAxisHeight;
+           // }
           },
 
           y: {
