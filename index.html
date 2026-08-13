@@ -1058,10 +1058,60 @@
 const datasetsCanvas = document.getElementById("datasets");
 
 if (datasetsCanvas) {
+
+  // =========================
+  // Background block plugin
+  // =========================
+
+  const totalStudiesBackground = {
+    id: "totalStudiesBackground",
+
+    beforeDatasetsDraw(chart) {
+
+      const { ctx, chartArea, scales } = chart;
+      const y = scales.y;
+
+      const totalStudies = 733;
+
+      const yTop = y.getPixelForValue(totalStudies);
+      const yBottom = y.getPixelForValue(0);
+
+      ctx.save();
+
+      // background rectangle
+      ctx.fillStyle = "rgba(214, 16, 110, 0.18)";
+
+      ctx.fillRect(
+        chartArea.left,
+        yTop,
+        chartArea.right - chartArea.left,
+        yBottom - yTop
+      );
+
+      // top border
+      ctx.strokeStyle = "rgba(214, 16, 110, 0.35)";
+      ctx.lineWidth = 1;
+
+      ctx.beginPath();
+      ctx.moveTo(chartArea.left, yTop);
+      ctx.lineTo(chartArea.right, yTop);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+  };
+
+
   new Chart(datasetsCanvas, {
+
     type: "bar",
 
+    plugins: [
+      totalStudiesBackground
+    ],
+
     data: {
+
       labels: [
         "NLBS",
         "INbreast",
@@ -1070,41 +1120,13 @@ if (datasetsCanvas) {
       ],
 
       datasets: [
+
         // =========================
-        // Total number of studies
-        // BACKGROUND
+        // Studies included
         // =========================
+
         {
-          label: "Total studies",
-
-          data: [
-            5997,
-            115,
-            1775,
-            8723
-          ],
-
-          backgroundColor: "rgba(214, 16, 110, 0.18)",
-          borderColor: "rgba(214, 16, 110, 0.30)",
-          borderWidth: 1,
-          borderRadius: 6,
-
-          // широкий столбец
-          barPercentage: 0.55,
-          categoryPercentage: 0.8,
-
-          grouped: false,
-
-          // рисуем первым — на заднем плане
-          order: 2
-        },
-
-        // =========================
-        // Studies included in MammoAtlas
-        // FOREGROUND
-        // =========================
-        {
-          label: "Included in MammoAtlas",
+          label: "Studies",
 
           data: [
             176,
@@ -1115,58 +1137,104 @@ if (datasetsCanvas) {
 
           backgroundColor: "rgba(214, 16, 110, 0.78)",
           borderColor: "rgba(214, 16, 110, 1)",
+
           borderWidth: 1,
           borderRadius: 6,
 
-          // более узкий передний столбец
           barPercentage: 0.55,
-          categoryPercentage: 0.8,
-
-          grouped: false,
-
-          // рисуем поверх
-          order: 1
+          categoryPercentage: 0.8
         }
       ]
     },
 
+
     options: {
+
       responsive: true,
       maintainAspectRatio: false,
 
+
+      // =========================
+      // Plugins
+      // =========================
+
       plugins: {
+
         legend: {
+
           display: true,
           position: "top",
 
           labels: {
+
             usePointStyle: true,
             pointStyle: "rectRounded",
 
             font: {
               size: 14,
               weight: "bold"
+            },
+
+            // custom legend
+            generateLabels: function(chart) {
+
+              return [
+
+                {
+                  text: "Total MammoAtlas studies — 733",
+                  fillStyle: "rgba(214, 16, 110, 0.18)",
+                  strokeStyle: "rgba(214, 16, 110, 0.35)",
+                  lineWidth: 1,
+                  pointStyle: "rectRounded"
+                },
+
+                {
+                  text: "Studies by source dataset",
+                  fillStyle: "rgba(214, 16, 110, 0.78)",
+                  strokeStyle: "rgba(214, 16, 110, 1)",
+                  lineWidth: 1,
+                  pointStyle: "rectRounded"
+                }
+
+              ];
             }
           }
         },
 
+
         tooltip: {
+
           callbacks: {
+
             label: function(context) {
-              return context.dataset.label + ": " + context.parsed.y;
+
+              return (
+                context.dataset.label +
+                ": " +
+                context.parsed.y
+              );
             }
           }
         }
       },
 
+
+      // =========================
+      // Axes
+      // =========================
+
       scales: {
+
         x: {
+
           grid: {
             display: false
           },
 
           ticks: {
+
             autoSkip: false,
+
             maxRotation: 0,
             minRotation: 0,
 
@@ -1177,10 +1245,16 @@ if (datasetsCanvas) {
           }
         },
 
+
         y: {
+
           beginAtZero: true,
 
+          // чтобы 733 точно было видно
+          suggestedMax: 800,
+
           title: {
+
             display: true,
             text: "Number of studies",
 
