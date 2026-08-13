@@ -685,266 +685,549 @@ fetch("static/pdfs/MammoAtlas_sample.json")
     </div>
   </div>
 </footer>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
-<!-- Statcounter tracking code -->
-  
-<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
-
-    <!-- End of Statcounter Code -->
-
-  
 <script>
 
-  // =========================
-  // Y-axis settings
-  // =========================
+// =====================================================
+// SETTINGS
+// =====================================================
 
-  const commonYScaleTop = {
-    beginAtZero: true,
-    min: 0,
-    max: 2500,
+// Две верхние диаграммы
+const commonYScaleTop = {
+  beginAtZero: true,
+  min: 0,
+  max: 2500,
 
-    ticks: {
-      stepSize: 500,
-      precision: 0
-    }
-  };
+  ticks: {
+    stepSize: 500,
+    precision: 0
+  }
+};
 
-  const commonYScaleBottom = {
-    beginAtZero: true,
-    min: 0,
-    max: 400,
+// Две нижние диаграммы
+const commonYScaleBottom = {
+  beginAtZero: true,
+  min: 0,
+  max: 400,
 
-    ticks: {
-      stepSize: 100,
-      precision: 0
-    }
-  };
+  ticks: {
+    stepSize: 100,
+    precision: 0
+  }
+};
 
-  const commonXAxisHeight = 100;
+const commonXAxisHeight = 100;
+
+const chartColor = "rgba(214, 16, 110, 0.45)";
+const chartBorderColor = "rgba(214, 16, 110, 0.6)";
 
 
-  // =========================
-  // Findings histogram
-  // =========================
+// =====================================================
+// FINDINGS — BY QUANTITY
+// =====================================================
 
-  const findingsCanvas = document.getElementById("datasetHistogram");
+const findingsCanvas = document.getElementById("datasetHistogram");
 
-  if (findingsCanvas) {
-    new Chart(findingsCanvas, {
-      type: "bar",
+if (findingsCanvas) {
 
-      data: {
-        labels: [
-          "Mass",
-          "Calcification",
-          "Architectural distortion",
-          "Asymmetry",
-          "Lymph node",
-          "Local asymmetry",
-          "Nipple retraction",
-          "Skin retraction",
-          "Skin thickening"
+  new Chart(findingsCanvas, {
+    type: "bar",
+
+    data: {
+      labels: [
+        "Mass",
+        "Calcification",
+        "Architectural distortion",
+        "Asymmetry",
+        "Lymph node",
+        "Local asymmetry",
+        "Nipple retraction",
+        "Skin retraction",
+        "Skin thickening"
+      ],
+
+      datasets: [{
+        data: [
+          2345,
+          830,
+          315,
+          270,
+          43,
+          453,
+          4,
+          53,
+          543
         ],
 
-        datasets: [{
-          data: [
-            2345,
-            830,
-            315,
-            270,
-            43,
-            453,
-            4,
-            53,
-            543
-          ],
+        backgroundColor: chartColor,
+        borderColor: chartBorderColor,
+        borderWidth: 1,
+        borderRadius: 6
+      }]
+    },
 
-          backgroundColor: "rgba(214, 16, 110, 0.45)",
-          borderColor: "rgba(214, 16, 110, 0.6)",
-          borderWidth: 1,
-          borderRadius: 6
-        }]
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: {
+          display: false
+        },
+
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return "Findings: " + context.parsed.y;
+            }
+          }
+        }
       },
 
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
 
-        plugins: {
-          legend: {
+          ticks: {
+            autoSkip: false,
+            maxRotation: 55,
+            minRotation: 55
+          },
+
+          afterFit: function(scale) {
+            scale.height = commonXAxisHeight;
+          }
+        },
+
+        y: {
+          ...commonYScaleTop,
+
+          title: {
+            display: true,
+            text: "Number of findings"
+          }
+        }
+      }
+    }
+  });
+}
+
+
+// =====================================================
+// FINDINGS — BY UNIQUE FINDING
+// =====================================================
+
+const uniqueFindingsCanvas = document.getElementById("biradsHistogram");
+
+if (uniqueFindingsCanvas) {
+
+  new Chart(uniqueFindingsCanvas, {
+    type: "bar",
+
+    data: {
+      labels: [
+        "Mass",
+        "Calcification",
+        "Architectural distortion",
+        "Asymmetry",
+        "Lymph node",
+        "Local asymmetry",
+        "Nipple retraction",
+        "Skin retraction",
+        "Skin thickening"
+      ],
+
+      datasets: [{
+        data: [
+          2345,
+          830,
+          315,
+          270,
+          43,
+          453,
+          4,
+          53,
+          543
+        ],
+
+        backgroundColor: chartColor,
+        borderColor: chartBorderColor,
+        borderWidth: 1,
+        borderRadius: 6
+      }]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: {
+          display: false
+        },
+
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return "Findings: " + context.parsed.y;
+            }
+          }
+        }
+      },
+
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
+
+          ticks: {
+            autoSkip: false,
+            maxRotation: 55,
+            minRotation: 55
+          },
+
+          afterFit: function(scale) {
+            scale.height = commonXAxisHeight;
+          }
+        },
+
+        y: {
+          ...commonYScaleTop,
+
+          title: {
+            display: true,
+            text: "Number of findings"
+          }
+        }
+      }
+    }
+  });
+}
+
+
+// =====================================================
+// BI-RADS
+// =====================================================
+
+// ВСТАВЬ СЮДА СВОИ РЕАЛЬНЫЕ ЗНАЧЕНИЯ
+const BIRADS_LABELS = [
+  "1",
+  "2",
+  "3",
+  "4a",
+  "4b",
+  "4c",
+  "5"
+];
+
+const BIRADS_DATA = [
+  // сюда числа
+];
+
+
+const BIRADSCanvas = document.getElementById("BIRADS");
+
+if (BIRADSCanvas) {
+
+  new Chart(BIRADSCanvas, {
+    type: "bar",
+
+    data: {
+      labels: BIRADS_LABELS,
+
+      datasets: [{
+        data: BIRADS_DATA,
+
+        backgroundColor: chartColor,
+        borderColor: chartBorderColor,
+        borderWidth: 1,
+        borderRadius: 6
+      }]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: {
+          display: false
+        },
+
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return "Studies: " + context.parsed.y;
+            }
+          }
+        }
+      },
+
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
+
+          ticks: {
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0,
+
+            font: {
+              size: 15,
+              weight: "bold"
+            }
+          }
+        },
+
+        y: {
+          ...commonYScaleBottom,
+
+          title: {
+            display: true,
+            text: "Number of studies"
+          }
+        }
+      }
+    }
+  });
+}
+
+
+// =====================================================
+// ACR
+// =====================================================
+
+// ВСТАВЬ СЮДА СВОИ РЕАЛЬНЫЕ ЗНАЧЕНИЯ
+const ACR_LABELS = [
+  "A",
+  "B",
+  "C",
+  "D"
+];
+
+const ACR_DATA = [
+  // сюда числа
+];
+
+
+const ACRCanvas = document.getElementById("ACR");
+
+if (ACRCanvas) {
+
+  new Chart(ACRCanvas, {
+    type: "bar",
+
+    data: {
+      labels: ACR_LABELS,
+
+      datasets: [{
+        data: ACR_DATA,
+
+        backgroundColor: chartColor,
+        borderColor: chartBorderColor,
+        borderWidth: 1,
+        borderRadius: 6
+      }]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: {
+          display: false
+        },
+
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return "Studies: " + context.parsed.y;
+            }
+          }
+        }
+      },
+
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
+
+          ticks: {
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0,
+
+            font: {
+              size: 15,
+              weight: "bold"
+            }
+          }
+        },
+
+        y: {
+          ...commonYScaleBottom,
+
+          title: {
+            display: true,
+            text: "Number of studies"
+          }
+        }
+      }
+    }
+  });
+}
+
+
+// =====================================================
+// DATA SOURCES
+// =====================================================
+
+const datasetsCanvas = document.getElementById("datasets");
+
+if (datasetsCanvas) {
+
+  const valueLabels = {
+    id: "valueLabels",
+
+    afterDatasetsDraw(chart) {
+
+      const { ctx } = chart;
+      const meta = chart.getDatasetMeta(0);
+
+      ctx.save();
+
+      meta.data.forEach((bar, index) => {
+
+        const value =
+          chart.data.datasets[0].data[index];
+
+        ctx.fillStyle = "#444";
+        ctx.font = "bold 15px Arial";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+
+        ctx.fillText(
+          value,
+          bar.x + 10,
+          bar.y
+        );
+      });
+
+      ctx.restore();
+    }
+  };
+
+
+  new Chart(datasetsCanvas, {
+    type: "bar",
+
+    plugins: [
+      valueLabels
+    ],
+
+    data: {
+      labels: [
+        "NLBS",
+        "INbreast",
+        "CMMD",
+        "CSAW-CC"
+      ],
+
+      datasets: [{
+        data: [
+          176,
+          84,
+          173,
+          300
+        ],
+
+        backgroundColor:
+          "rgba(190, 70, 120, 0.65)",
+
+        borderWidth: 0,
+
+        borderRadius: 10,
+        borderSkipped: false,
+
+        barThickness: 24
+      }]
+    },
+
+    options: {
+      indexAxis: "y",
+
+      responsive: true,
+      maintainAspectRatio: false,
+
+      layout: {
+        padding: {
+          right: 45
+        }
+      },
+
+      plugins: {
+        legend: {
+          display: false
+        },
+
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.raw + " studies";
+            }
+          }
+        }
+      },
+
+      scales: {
+        x: {
+          beginAtZero: true,
+          suggestedMax: 330,
+
+          grid: {
+            display: false
+          },
+
+          ticks: {
+            display: false
+          },
+
+          border: {
             display: false
           }
         },
 
-        scales: {
-          x: {
-            grid: {
-              display: false
+        y: {
+          grid: {
+            display: false
+          },
+
+          border: {
+            display: false
+          },
+
+          ticks: {
+            font: {
+              size: 15,
+              weight: "bold"
             },
 
-            ticks: {
-              autoSkip: false,
-              maxRotation: 55,
-              minRotation: 55
-            },
-
-            afterFit: function(scale) {
-              scale.height = commonXAxisHeight;
-            }
-          },
-
-          y: {
-            ...commonYScaleTop,
-
-            title: {
-              display: true,
-              text: "Number of findings"
-            }
+            color: "#444"
           }
         }
       }
-    });
-  }
-
-
-  // =========================
-  // Unique findings histogram
-  // =========================
-
-  const biradsCanvas = document.getElementById("biradsHistogram");
-
-  if (biradsCanvas) {
-    new Chart(biradsCanvas, {
-      type: "bar",
-
-      data: {
-        // твои labels/data
-      },
-
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-
-        plugins: {
-          legend: {
-            display: false
-          }
-        },
-
-        scales: {
-          x: {
-            grid: {
-              display: false
-            },
-
-            afterFit: function(scale) {
-              scale.height = commonXAxisHeight;
-            }
-          },
-
-          y: {
-            ...commonYScaleTop,
-
-            title: {
-              display: true,
-              text: "Number of findings"
-            }
-          }
-        }
-      }
-    });
-  }
-
-
-  // =========================
-  // BI-RADS
-  // =========================
-
-  const BIRADSCanvas = document.getElementById("BIRADS");
-
-  if (BIRADSCanvas) {
-    new Chart(BIRADSCanvas, {
-      type: "bar",
-
-      data: {
-        // твои BI-RADS labels/data
-      },
-
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-
-        plugins: {
-          legend: {
-            display: false
-          }
-        },
-
-        scales: {
-          x: {
-            grid: {
-              display: false
-            }
-          },
-
-          y: {
-            ...commonYScaleBottom,
-
-            title: {
-              display: true,
-              text: "Number of studies"
-            }
-          }
-        }
-      }
-    });
-  }
-
-
-  // =========================
-  // ACR
-  // =========================
-
-  const ACRCanvas = document.getElementById("ACR");
-
-  if (ACRCanvas) {
-    new Chart(ACRCanvas, {
-      type: "bar",
-
-      data: {
-        // твои ACR labels/data
-      },
-
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-
-        plugins: {
-          legend: {
-            display: false
-          }
-        },
-
-        scales: {
-          x: {
-            grid: {
-              display: false
-            }
-          },
-
-          y: {
-            ...commonYScaleBottom,
-
-            title: {
-              display: true,
-              text: "Number of studies"
-            }
-          }
-        }
-      }
-    });
-  }
+    }
+  });
+}
 
 </script>
 
