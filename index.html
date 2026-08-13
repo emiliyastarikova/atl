@@ -994,57 +994,38 @@ fetch("static/pdfs/MammoAtlas_sample.json")
     });
   }
 // =========================
-// datasets stacked bar
+// datasets horizontal bars
 // =========================
 
 const datasetsCanvas = document.getElementById("datasets");
 
 if (datasetsCanvas) {
 
-  // =========================
-  // Labels inside segments
-  // =========================
-  const stackedBarLabels = {
-    id: "stackedBarLabels",
+  const valueLabels = {
+    id: "valueLabels",
 
     afterDatasetsDraw(chart) {
       const { ctx } = chart;
+      const meta = chart.getDatasetMeta(0);
 
-      chart.data.datasets.forEach((dataset, datasetIndex) => {
-        const meta = chart.getDatasetMeta(datasetIndex);
+      ctx.save();
 
-        if (!meta.data.length) return;
+      meta.data.forEach((bar, index) => {
+        const value = chart.data.datasets[0].data[index];
 
-        const bar = meta.data[0];
-
-        const x = bar.x - bar.width / 2;
-        const centerX = x + bar.width / 2;
-        const centerY = bar.y;
-
-        ctx.save();
-
-        ctx.textAlign = "center";
+        ctx.fillStyle = "#444";
+        ctx.font = "bold 15px Arial";
+        ctx.textAlign = "left";
         ctx.textBaseline = "middle";
-        ctx.fillStyle = "#ffffff";
 
-        // Dataset name
-        ctx.font = "bold 14px Arial";
         ctx.fillText(
-          dataset.label,
-          centerX,
-          centerY - 10
+          value,
+          bar.x + 10,
+          bar.y
         );
-
-        // Number
-        ctx.font = "bold 16px Arial";
-        ctx.fillText(
-          dataset.data[0],
-          centerX,
-          centerY + 12
-        );
-
-        ctx.restore();
       });
+
+      ctx.restore();
     }
   };
 
@@ -1053,77 +1034,34 @@ if (datasetsCanvas) {
     type: "bar",
 
     plugins: [
-      stackedBarLabels
+      valueLabels
     ],
 
     data: {
-      labels: ["MammoAtlas"],
+      labels: [
+        "NLBS",
+        "INbreast",
+        "CMMD",
+        "CSAW-CC"
+      ],
 
       datasets: [
         {
-          label: "NLBS",
-          data: [176],
+          data: [
+            176,
+            84,
+            173,
+            300
+          ],
 
-          backgroundColor: "rgba(190, 70, 120, 0.78)",
-
-          borderWidth: 0,
-          borderSkipped: false,
-
-          // скругление только слева
-          borderRadius: {
-            topLeft: 14,
-            bottomLeft: 14,
-            topRight: 0,
-            bottomRight: 0
-          },
-
-          barThickness: 80
-        },
-
-        {
-          label: "INbreast",
-          data: [84],
-
-          backgroundColor: "rgba(105, 145, 170, 0.78)",
+          backgroundColor: "rgba(190, 70, 120, 0.65)",
 
           borderWidth: 0,
-          borderSkipped: false,
-          borderRadius: 0,
 
-          barThickness: 80
-        },
-
-        {
-          label: "CMMD",
-          data: [173],
-
-          backgroundColor: "rgba(190, 155, 95, 0.78)",
-
-          borderWidth: 0,
-          borderSkipped: false,
-          borderRadius: 0,
-
-          barThickness: 80
-        },
-
-        {
-          label: "CSOW-CC",
-          data: [300],
-
-          backgroundColor: "rgba(125, 110, 155, 0.78)",
-
-          borderWidth: 0,
+          borderRadius: 10,
           borderSkipped: false,
 
-          // скругление только справа
-          borderRadius: {
-            topLeft: 0,
-            bottomLeft: 0,
-            topRight: 14,
-            bottomRight: 14
-          },
-
-          barThickness: 80
+          barThickness: 24
         }
       ]
     },
@@ -1136,31 +1074,11 @@ if (datasetsCanvas) {
 
       layout: {
         padding: {
-          top: 5,
-          left: 10,
-          right: 10,
-          bottom: 5
+          right: 45
         }
       },
 
       plugins: {
-
-        // =========================
-        // Total
-        // =========================
-        title: {
-          display: true,
-          text: "733 studies",
-          padding: {
-            bottom: 18
-          },
-
-          font: {
-            size: 18,
-            weight: "bold"
-          }
-        },
-
         legend: {
           display: false
         },
@@ -1168,21 +1086,7 @@ if (datasetsCanvas) {
         tooltip: {
           callbacks: {
             label: function(context) {
-              const value = context.raw;
-              const total = 733;
-
-              const percent = (
-                value / total * 100
-              ).toFixed(1);
-
-              return (
-                context.dataset.label +
-                ": " +
-                value +
-                " studies (" +
-                percent +
-                "%)"
-              );
+              return context.raw + " studies";
             }
           }
         }
@@ -1190,9 +1094,9 @@ if (datasetsCanvas) {
 
       scales: {
         x: {
-          stacked: true,
           beginAtZero: true,
-          max: 733,
+
+          suggestedMax: 330,
 
           grid: {
             display: false
@@ -1208,18 +1112,21 @@ if (datasetsCanvas) {
         },
 
         y: {
-          stacked: true,
-
           grid: {
-            display: false
-          },
-
-          ticks: {
             display: false
           },
 
           border: {
             display: false
+          },
+
+          ticks: {
+            font: {
+              size: 15,
+              weight: "bold"
+            },
+
+            color: "#444"
           }
         }
       }
