@@ -993,7 +993,6 @@ fetch("static/pdfs/MammoAtlas_sample.json")
       }
     });
   }
-
 // =========================
 // datasets stacked bar
 // =========================
@@ -1001,8 +1000,61 @@ fetch("static/pdfs/MammoAtlas_sample.json")
 const datasetsCanvas = document.getElementById("datasets");
 
 if (datasetsCanvas) {
+
+  // =========================
+  // Labels inside segments
+  // =========================
+  const stackedBarLabels = {
+    id: "stackedBarLabels",
+
+    afterDatasetsDraw(chart) {
+      const { ctx } = chart;
+
+      chart.data.datasets.forEach((dataset, datasetIndex) => {
+        const meta = chart.getDatasetMeta(datasetIndex);
+
+        if (!meta.data.length) return;
+
+        const bar = meta.data[0];
+
+        const x = bar.x - bar.width / 2;
+        const centerX = x + bar.width / 2;
+        const centerY = bar.y;
+
+        ctx.save();
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#ffffff";
+
+        // Dataset name
+        ctx.font = "bold 14px Arial";
+        ctx.fillText(
+          dataset.label,
+          centerX,
+          centerY - 10
+        );
+
+        // Number
+        ctx.font = "bold 16px Arial";
+        ctx.fillText(
+          dataset.data[0],
+          centerX,
+          centerY + 12
+        );
+
+        ctx.restore();
+      });
+    }
+  };
+
+
   new Chart(datasetsCanvas, {
     type: "bar",
+
+    plugins: [
+      stackedBarLabels
+    ],
 
     data: {
       labels: ["MammoAtlas"],
@@ -1011,29 +1063,66 @@ if (datasetsCanvas) {
         {
           label: "NLBS",
           data: [176],
-          backgroundColor: "rgba(190, 70, 120, 0.75)",
+
+          backgroundColor: "rgba(190, 70, 120, 0.78)",
+
           borderWidth: 0,
+          borderSkipped: false,
+
+          // скругление только слева
+          borderRadius: {
+            topLeft: 14,
+            bottomLeft: 14,
+            topRight: 0,
+            bottomRight: 0
+          },
+
           barThickness: 80
         },
+
         {
           label: "INbreast",
           data: [84],
-          backgroundColor: "rgba(105, 145, 170, 0.75)",
+
+          backgroundColor: "rgba(105, 145, 170, 0.78)",
+
           borderWidth: 0,
+          borderSkipped: false,
+          borderRadius: 0,
+
           barThickness: 80
         },
+
         {
           label: "CMMD",
           data: [173],
-          backgroundColor: "rgba(190, 155, 95, 0.75)",
+
+          backgroundColor: "rgba(190, 155, 95, 0.78)",
+
           borderWidth: 0,
+          borderSkipped: false,
+          borderRadius: 0,
+
           barThickness: 80
         },
+
         {
-          label: "CSAW-CC",
+          label: "CSOW-CC",
           data: [300],
-          backgroundColor: "rgba(125, 110, 155, 0.75)",
+
+          backgroundColor: "rgba(125, 110, 155, 0.78)",
+
           borderWidth: 0,
+          borderSkipped: false,
+
+          // скругление только справа
+          borderRadius: {
+            topLeft: 0,
+            bottomLeft: 0,
+            topRight: 14,
+            bottomRight: 14
+          },
+
           barThickness: 80
         }
       ]
@@ -1045,21 +1134,35 @@ if (datasetsCanvas) {
       responsive: true,
       maintainAspectRatio: false,
 
+      layout: {
+        padding: {
+          top: 5,
+          left: 10,
+          right: 10,
+          bottom: 5
+        }
+      },
+
       plugins: {
-        legend: {
+
+        // =========================
+        // Total
+        // =========================
+        title: {
           display: true,
-          position: "top",
+          text: "733 studies",
+          padding: {
+            bottom: 18
+          },
 
-          labels: {
-            usePointStyle: true,
-            pointStyle: "rectRounded",
-            padding: 20,
-
-            font: {
-              size: 14,
-              weight: "bold"
-            }
+          font: {
+            size: 18,
+            weight: "bold"
           }
+        },
+
+        legend: {
+          display: false
         },
 
         tooltip: {
@@ -1111,11 +1214,11 @@ if (datasetsCanvas) {
             display: false
           },
 
-          border: {
+          ticks: {
             display: false
           },
 
-          ticks: {
+          border: {
             display: false
           }
         }
