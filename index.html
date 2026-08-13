@@ -1070,39 +1070,6 @@ if (datasetsCanvas) {
       ],
 
       datasets: [
-        // =========================
-        // Total number of studies
-        // BACKGROUND
-        // =========================
-        {
-          label: "Total studies",
-
-          data: [
-            5997,
-            115,
-            1775,
-            8723
-          ],
-
-          backgroundColor: "rgba(214, 16, 110, 0.18)",
-          borderColor: "rgba(214, 16, 110, 0.30)",
-          borderWidth: 1,
-          borderRadius: 6,
-
-          // широкий столбец
-          barPercentage: 0.55,
-          categoryPercentage: 0.8,
-
-          grouped: false,
-
-          // рисуем первым — на заднем плане
-          order: 2
-        },
-
-        // =========================
-        // Studies included in MammoAtlas
-        // FOREGROUND
-        // =========================
         {
           label: "Included in MammoAtlas",
 
@@ -1118,14 +1085,8 @@ if (datasetsCanvas) {
           borderWidth: 1,
           borderRadius: 6,
 
-          // более узкий передний столбец
           barPercentage: 0.55,
-          categoryPercentage: 0.8,
-
-          grouped: false,
-
-          // рисуем поверх
-          order: 1
+          categoryPercentage: 0.8
         }
       ]
     },
