@@ -598,7 +598,18 @@
   <div class="hero-body">
     <div class="container">
 
-      <h2 class="title">Annotation JSON sample</h2>
+      <div class="bibtex-header">
+        <h2 class="title">Annotation JSON sample</h2>
+
+        <button
+          class="copy-bibtex-btn"
+          onclick="copyAnnotationJSON()"
+          title="Copy JSON to clipboard"
+        >
+          <i class="fas fa-copy"></i>
+          <span id="copy-json-text">Copy</span>
+        </button>
+      </div>
 
       <pre
         id="json-viewer"
@@ -625,9 +636,27 @@ fetch("static/pdfs/MammoAtlas_sample.json")
     document.getElementById("json-viewer").textContent =
       JSON.stringify(data, null, 2);
   });
-</script>
-<!--End JSON viewer -->
 
+
+function copyAnnotationJSON() {
+  const jsonText =
+    document.getElementById("json-viewer").textContent;
+
+  navigator.clipboard.writeText(jsonText)
+    .then(() => {
+
+      const copyText =
+        document.getElementById("copy-json-text");
+
+      copyText.textContent = "Copied!";
+
+      setTimeout(() => {
+        copyText.textContent = "Copy";
+      }, 1500);
+    });
+}
+</script>
+<!-- End JSON viewer -->
 
 <!-- Paper poster -->
 <section class="hero is-small is-light">
