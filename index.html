@@ -1086,14 +1086,14 @@ fetch("static/pdfs/MammoAtlas_sample.json")
     });
   }
 // =========================
-// datasets histogram
+// datasets doughnut chart
 // =========================
 
 const datasetsCanvas = document.getElementById("datasets");
 
 if (datasetsCanvas) {
   new Chart(datasetsCanvas, {
-    type: "bar",
+    type: "doughnut",
 
     data: {
       labels: [
@@ -1114,13 +1114,23 @@ if (datasetsCanvas) {
             300
           ],
 
-          backgroundColor: "rgba(214, 16, 110, 0.45)",
-          borderColor: "rgba(214, 16, 110, 0.6)",
-          borderWidth: 1,
-          borderRadius: 6,
+          backgroundColor: [
+            "rgba(214, 16, 110, 0.75)",
+            "rgba(60, 160, 220, 0.75)",
+            "rgba(245, 180, 60, 0.75)",
+            "rgba(120, 90, 200, 0.75)"
+          ],
 
-          barPercentage: 0.55,
-          categoryPercentage: 0.8
+          borderColor: [
+            "rgba(214, 16, 110, 1)",
+            "rgba(60, 160, 220, 1)",
+            "rgba(245, 180, 60, 1)",
+            "rgba(120, 90, 200, 1)"
+          ],
+
+          borderWidth: 2,
+
+          hoverOffset: 10
         }
       ]
     },
@@ -1129,14 +1139,16 @@ if (datasetsCanvas) {
       responsive: true,
       maintainAspectRatio: false,
 
+      cutout: "55%",
+
       plugins: {
         legend: {
           display: true,
-          position: "top",
+          position: "right",
 
           labels: {
             usePointStyle: true,
-            pointStyle: "rectRounded",
+            pointStyle: "circle",
 
             font: {
               size: 14,
@@ -1148,45 +1160,26 @@ if (datasetsCanvas) {
         tooltip: {
           callbacks: {
             label: function(context) {
-              return context.dataset.label + ": " + context.parsed.y;
+              const value = context.parsed;
+
+              const total = context.dataset.data.reduce(
+                (sum, item) => sum + item,
+                0
+              );
+
+              const percent = (
+                value / total * 100
+              ).toFixed(1);
+
+              return (
+                context.label +
+                ": " +
+                value +
+                " (" +
+                percent +
+                "%)"
+              );
             }
-          }
-        }
-      },
-
-      scales: {
-        x: {
-          grid: {
-            display: false
-          },
-
-          ticks: {
-            autoSkip: false,
-            maxRotation: 0,
-            minRotation: 0,
-
-            font: {
-              size: 16,
-              weight: "bold"
-            }
-          }
-        },
-
-        y: {
-          beginAtZero: true,
-
-          title: {
-            display: true,
-            text: "Number of studies",
-
-            font: {
-              size: 14,
-              weight: "bold"
-            }
-          },
-
-          ticks: {
-            precision: 0
           }
         }
       }
