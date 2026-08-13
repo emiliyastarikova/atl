@@ -489,21 +489,21 @@
 
     <div class="columns is-variable is-5">
 
-      <!-- Findings histogram -->
+      <!-- birads histogram -->
       <div class="column is-half">
         <h3 class="title is-5 has-text-centered">
-          By quantity
+          BI-RADS
         </h3>
 
         <div style="position: relative; width: 100%; height: 420px;">
           <canvas
             id="BIRADS"
-            aria-label="Dataset findings distribution">
+            aria-label="BI-RADS distribution">
           </canvas>
         </div>
       </div>
 
-      <!-- BI-RADS histogram -->
+      <!-- ACR histogram -->
       <div class="column is-half">
         <h3 class="title is-5 has-text-centered">
           By unique finding
@@ -512,7 +512,7 @@
         <div style="position: relative; width: 100%; height: 420px;">
           <canvas
             id="ACR"
-            aria-label="BI-RADS distribution">
+            aria-label="ACR distribution">
           </canvas>
         </div>
       </div>
@@ -966,8 +966,8 @@ fetch("static/pdfs/MammoAtlas_sample.json")
 
             ticks: {
               autoSkip: false,
-              maxRotation: 55,
-              minRotation: 55
+              maxRotation: 0,
+              minRotation: 0
             },
 
             // ВАЖНО: фиксируем высоту X-axis
