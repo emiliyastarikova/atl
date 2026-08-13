@@ -1051,54 +1051,153 @@
       }
     });
   }
-const totalStudiesBackground = {
-  id: "totalStudiesBackground",
+// =========================
+// datasets histogram
+// =========================
 
-  beforeDatasetsDraw(chart) {
+const datasetsCanvas = document.getElementById("datasets");
 
-    const { ctx, scales } = chart;
-    const y = scales.y;
+if (datasetsCanvas) {
+  new Chart(datasetsCanvas, {
+    type: "bar",
 
-    const totalStudies = 733;
+    data: {
+      labels: [
+        "NLBS",
+        "INbreast",
+        "CMMD",
+        "CSOW-CC"
+      ],
 
-    const meta = chart.getDatasetMeta(0);
+      datasets: [
+        // =========================
+        // Total number of studies
+        // BACKGROUND
+        // =========================
+        {
+          label: "Total studies",
 
-    if (!meta.data.length) return;
+          data: [
+            5997,
+            115,
+            1775,
+            8723
+          ],
 
-    const firstBar = meta.data[0];
-    const lastBar = meta.data[meta.data.length - 1];
+          backgroundColor: "rgba(214, 16, 110, 0.18)",
+          borderColor: "rgba(214, 16, 110, 0.30)",
+          borderWidth: 1,
+          borderRadius: 6,
 
-    // границы от начала первого столбца
-    // до конца последнего столбца
-    const xLeft = firstBar.x - firstBar.width / 2;
-    const xRight = lastBar.x + lastBar.width / 2;
+          // широкий столбец
+          barPercentage: 0.55,
+          categoryPercentage: 0.8,
 
-    const yTop = y.getPixelForValue(totalStudies);
-    const yBottom = y.getPixelForValue(0);
+          grouped: false,
 
-    ctx.save();
+          // рисуем первым — на заднем плане
+          order: 2
+        },
 
-    ctx.fillStyle = "rgba(214, 16, 110, 0.18)";
+        // =========================
+        // Studies included in MammoAtlas
+        // FOREGROUND
+        // =========================
+        {
+          label: "Included in MammoAtlas",
 
-    ctx.fillRect(
-      xLeft,
-      yTop,
-      xRight - xLeft,
-      yBottom - yTop
-    );
+          data: [
+            176,
+            84,
+            173,
+            300
+          ],
 
-    // верхняя граница
-    ctx.strokeStyle = "rgba(214, 16, 110, 0.35)";
-    ctx.lineWidth = 1;
+          backgroundColor: "rgba(214, 16, 110, 0.78)",
+          borderColor: "rgba(214, 16, 110, 1)",
+          borderWidth: 1,
+          borderRadius: 6,
 
-    ctx.beginPath();
-    ctx.moveTo(xLeft, yTop);
-    ctx.lineTo(xRight, yTop);
-    ctx.stroke();
+          // более узкий передний столбец
+          barPercentage: 0.55,
+          categoryPercentage: 0.8,
 
-    ctx.restore();
-  }
-};
+          grouped: false,
+
+          // рисуем поверх
+          order: 1
+        }
+      ]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: {
+          display: true,
+          position: "top",
+
+          labels: {
+            usePointStyle: true,
+            pointStyle: "rectRounded",
+
+            font: {
+              size: 14,
+              weight: "bold"
+            }
+          }
+        },
+
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ": " + context.parsed.y;
+            }
+          }
+        }
+      },
+
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
+
+          ticks: {
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0,
+
+            font: {
+              size: 16,
+              weight: "bold"
+            }
+          }
+        },
+
+        y: {
+          beginAtZero: true,
+
+          title: {
+            display: true,
+            text: "Number of studies",
+
+            font: {
+              size: 14,
+              weight: "bold"
+            }
+          },
+
+          ticks: {
+            precision: 0
+          }
+        }
+      }
+    }
+  });
+}
 
 
 </script>
