@@ -1051,227 +1051,54 @@
       }
     });
   }
-// =========================
-// datasets histogram
-// =========================
+const totalStudiesBackground = {
+  id: "totalStudiesBackground",
 
-const datasetsCanvas = document.getElementById("datasets");
+  beforeDatasetsDraw(chart) {
 
-if (datasetsCanvas) {
+    const { ctx, scales } = chart;
+    const y = scales.y;
 
-  // =========================
-  // Background block plugin
-  // =========================
+    const totalStudies = 733;
 
-  const totalStudiesBackground = {
-    id: "totalStudiesBackground",
+    const meta = chart.getDatasetMeta(0);
 
-    beforeDatasetsDraw(chart) {
+    if (!meta.data.length) return;
 
-      const { ctx, chartArea, scales } = chart;
-      const y = scales.y;
+    const firstBar = meta.data[0];
+    const lastBar = meta.data[meta.data.length - 1];
 
-      const totalStudies = 733;
+    // границы от начала первого столбца
+    // до конца последнего столбца
+    const xLeft = firstBar.x - firstBar.width / 2;
+    const xRight = lastBar.x + lastBar.width / 2;
 
-      const yTop = y.getPixelForValue(totalStudies);
-      const yBottom = y.getPixelForValue(0);
+    const yTop = y.getPixelForValue(totalStudies);
+    const yBottom = y.getPixelForValue(0);
 
-      ctx.save();
+    ctx.save();
 
-      // background rectangle
-      ctx.fillStyle = "rgba(214, 16, 110, 0.18)";
+    ctx.fillStyle = "rgba(214, 16, 110, 0.18)";
 
-      ctx.fillRect(
-        chartArea.left,
-        yTop,
-        chartArea.right - chartArea.left,
-        yBottom - yTop
-      );
+    ctx.fillRect(
+      xLeft,
+      yTop,
+      xRight - xLeft,
+      yBottom - yTop
+    );
 
-      // top border
-      ctx.strokeStyle = "rgba(214, 16, 110, 0.35)";
-      ctx.lineWidth = 1;
+    // верхняя граница
+    ctx.strokeStyle = "rgba(214, 16, 110, 0.35)";
+    ctx.lineWidth = 1;
 
-      ctx.beginPath();
-      ctx.moveTo(chartArea.left, yTop);
-      ctx.lineTo(chartArea.right, yTop);
-      ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(xLeft, yTop);
+    ctx.lineTo(xRight, yTop);
+    ctx.stroke();
 
-      ctx.restore();
-    }
-  };
-
-
-  new Chart(datasetsCanvas, {
-
-    type: "bar",
-
-    plugins: [
-      totalStudiesBackground
-    ],
-
-    data: {
-
-      labels: [
-        "NLBS",
-        "INbreast",
-        "CMMD",
-        "CSOW-CC"
-      ],
-
-      datasets: [
-
-        // =========================
-        // Studies included
-        // =========================
-
-        {
-          label: "Studies",
-
-          data: [
-            176,
-            84,
-            173,
-            300
-          ],
-
-          backgroundColor: "rgba(214, 16, 110, 0.78)",
-          borderColor: "rgba(214, 16, 110, 1)",
-
-          borderWidth: 1,
-          borderRadius: 6,
-
-          barPercentage: 0.55,
-          categoryPercentage: 0.8
-        }
-      ]
-    },
-
-
-    options: {
-
-      responsive: true,
-      maintainAspectRatio: false,
-
-
-      // =========================
-      // Plugins
-      // =========================
-
-      plugins: {
-
-        legend: {
-
-          display: true,
-          position: "top",
-
-          labels: {
-
-            usePointStyle: true,
-            pointStyle: "rectRounded",
-
-            font: {
-              size: 14,
-              weight: "bold"
-            },
-
-            // custom legend
-            generateLabels: function(chart) {
-
-              return [
-
-                {
-                  text: "Total MammoAtlas studies — 733",
-                  fillStyle: "rgba(214, 16, 110, 0.18)",
-                  strokeStyle: "rgba(214, 16, 110, 0.35)",
-                  lineWidth: 1,
-                  pointStyle: "rectRounded"
-                },
-
-                {
-                  text: "Studies by source dataset",
-                  fillStyle: "rgba(214, 16, 110, 0.78)",
-                  strokeStyle: "rgba(214, 16, 110, 1)",
-                  lineWidth: 1,
-                  pointStyle: "rectRounded"
-                }
-
-              ];
-            }
-          }
-        },
-
-
-        tooltip: {
-
-          callbacks: {
-
-            label: function(context) {
-
-              return (
-                context.dataset.label +
-                ": " +
-                context.parsed.y
-              );
-            }
-          }
-        }
-      },
-
-
-      // =========================
-      // Axes
-      // =========================
-
-      scales: {
-
-        x: {
-
-          grid: {
-            display: false
-          },
-
-          ticks: {
-
-            autoSkip: false,
-
-            maxRotation: 0,
-            minRotation: 0,
-
-            font: {
-              size: 16,
-              weight: "bold"
-            }
-          }
-        },
-
-
-        y: {
-
-          beginAtZero: true,
-
-          // чтобы 733 точно было видно
-          suggestedMax: 800,
-
-          title: {
-
-            display: true,
-            text: "Number of studies",
-
-            font: {
-              size: 14,
-              weight: "bold"
-            }
-          },
-
-          ticks: {
-            precision: 0
-          }
-        }
-      }
-    }
-  });
-}
+    ctx.restore();
+  }
+};
 
 
 </script>
