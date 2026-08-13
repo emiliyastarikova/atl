@@ -992,6 +992,92 @@ fetch("static/pdfs/MammoAtlas_sample.json")
       }
     });
   }
+
+  // =========================
+// ACR histogram
+// =========================
+
+const ACRCanvas = document.getElementById("ACR");
+
+if (ACRCanvas) {
+  new Chart(ACRCanvas, {
+    type: "bar",
+
+    data: {
+      labels: [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+
+      datasets: [{
+        data: [
+          300,
+          700,
+          1200,
+          500
+        ],
+
+        backgroundColor: "rgba(214, 16, 110, 0.45)",
+        borderColor: "rgba(214, 16, 110, 0.6)",
+        borderWidth: 1,
+        borderRadius: 6
+      }]
+    },
+
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+
+      plugins: {
+        legend: {
+          display: false
+        },
+
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return "Studies: " + context.parsed.y;
+            }
+          }
+        }
+      },
+
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
+
+          ticks: {
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0,
+
+            font: {
+              size: 16,
+              weight: "bold"
+            }
+          },
+
+          afterFit: function(scale) {
+            scale.height = commonXAxisHeight;
+          }
+        },
+
+        y: {
+          ...commonYScale,
+
+          title: {
+            display: true,
+            text: "Number of studies"
+          }
+        }
+      }
+    }
+  });
+}
 // =========================
 // datasets horizontal bars
 // =========================
