@@ -1085,17 +1085,85 @@ fetch("static/pdfs/MammoAtlas_sample.json")
       }
     });
   }
-// =========================
-// datasets doughnut chart
-// =========================
-
 const datasetsCanvas = document.getElementById("datasets");
 
 if (datasetsCanvas) {
+
+  const doughnut3D = {
+    id: "doughnut3D",
+
+    beforeDatasetDraw(chart, args) {
+      if (args.index !== 0) return;
+
+      const ctx = chart.ctx;
+      const meta = chart.getDatasetMeta(0);
+
+      ctx.save();
+
+      // нижняя "толщина"
+      for (let depth = 14; depth > 0; depth--) {
+
+        meta.data.forEach((arc, index) => {
+
+          const props = arc.getProps(
+            [
+              "x",
+              "y",
+              "startAngle",
+              "endAngle",
+              "innerRadius",
+              "outerRadius"
+            ],
+            true
+          );
+
+          ctx.beginPath();
+
+          ctx.arc(
+            props.x,
+            props.y + depth,
+            props.outerRadius,
+            props.startAngle,
+            props.endAngle
+          );
+
+          ctx.arc(
+            props.x,
+            props.y + depth,
+            props.innerRadius,
+            props.endAngle,
+            props.startAngle,
+            true
+          );
+
+          ctx.closePath();
+
+          ctx.fillStyle = [
+            "rgba(150, 10, 80, 0.55)",
+            "rgba(30, 120, 170, 0.55)",
+            "rgba(180, 120, 30, 0.55)",
+            "rgba(80, 55, 150, 0.55)"
+          ][index];
+
+          ctx.fill();
+        });
+      }
+
+      ctx.restore();
+    }
+  };
+
+
   new Chart(datasetsCanvas, {
+
     type: "doughnut",
 
+    plugins: [
+      doughnut3D
+    ],
+
     data: {
+
       labels: [
         "NLBS",
         "INbreast",
@@ -1115,33 +1183,41 @@ if (datasetsCanvas) {
           ],
 
           backgroundColor: [
-            "rgba(214, 16, 110, 0.75)",
-            "rgba(60, 160, 220, 0.75)",
-            "rgba(245, 180, 60, 0.75)",
-            "rgba(120, 90, 200, 0.75)"
+            "rgba(214, 16, 110, 0.80)",
+            "rgba(60, 180, 230, 0.80)",
+            "rgba(245, 175, 55, 0.80)",
+            "rgba(135, 90, 210, 0.80)"
           ],
 
           borderColor: [
             "rgba(214, 16, 110, 1)",
-            "rgba(60, 160, 220, 1)",
-            "rgba(245, 180, 60, 1)",
-            "rgba(120, 90, 200, 1)"
+            "rgba(60, 180, 230, 1)",
+            "rgba(245, 175, 55, 1)",
+            "rgba(135, 90, 210, 1)"
           ],
 
           borderWidth: 2,
 
-          hoverOffset: 10
+          hoverOffset: 12
         }
       ]
     },
 
     options: {
+
       responsive: true,
       maintainAspectRatio: false,
 
-      cutout: "55%",
+      cutout: "52%",
+
+      layout: {
+        padding: {
+          bottom: 20
+        }
+      },
 
       plugins: {
+
         legend: {
           display: true,
           position: "right",
@@ -1158,18 +1234,21 @@ if (datasetsCanvas) {
         },
 
         tooltip: {
+
           callbacks: {
+
             label: function(context) {
+
               const value = context.parsed;
 
-              const total = context.dataset.data.reduce(
-                (sum, item) => sum + item,
-                0
-              );
+              const total =
+                context.dataset.data.reduce(
+                  (sum, item) => sum + item,
+                  0
+                );
 
-              const percent = (
-                value / total * 100
-              ).toFixed(1);
+              const percent =
+                (value / total * 100).toFixed(1);
 
               return (
                 context.label +
