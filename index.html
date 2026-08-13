@@ -592,8 +592,40 @@
 <!-- End video carousel -->
 
 
+<!-- JSON viewer -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
 
+      <h2 class="title">Annotation JSON</h2>
 
+      <pre
+        id="json-viewer"
+        style="
+          height: 550px;
+          overflow: auto;
+          background: #ffffff;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 20px;
+          text-align: left;
+          font-size: 14px;
+        "
+      ></pre>
+
+    </div>
+  </div>
+</section>
+
+<script>
+fetch("static/json/annotations.json")
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById("json-viewer").textContent =
+      JSON.stringify(data, null, 2);
+  });
+</script>
+<!--End JSON viewer -->
 
 
 <!-- Paper poster -->
