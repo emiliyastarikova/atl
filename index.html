@@ -1061,7 +1061,7 @@ if (datasetsCanvas) {
           borderRadius: 10,
           borderSkipped: false,
 
-          barThickness: 24
+          barThickness: 26
         }
       ]
     },
@@ -1074,6 +1074,8 @@ if (datasetsCanvas) {
 
       layout: {
         padding: {
+          top: 0,
+          bottom: 0,
           right: 45
         }
       },
@@ -1112,6 +1114,8 @@ if (datasetsCanvas) {
         },
 
         y: {
+          offset: false,
+
           grid: {
             display: false
           },
@@ -1121,6 +1125,8 @@ if (datasetsCanvas) {
           },
 
           ticks: {
+            padding: 8,
+
             font: {
               size: 15,
               weight: "bold"
