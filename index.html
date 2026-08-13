@@ -994,237 +994,66 @@ fetch("static/pdfs/MammoAtlas_sample.json")
     });
   }
 
-  // =========================
-  // BIRADS histogram
-  // =========================
+// =========================
+// datasets stacked bar
+// =========================
 
-  const acrCanvas = document.getElementById("ACR");
-
-  if (acrCanvas) {
-    new Chart(acrCanvas, {
-      type: "bar",
-
-      data: {
-        labels: [
-          "Mass",
-          "Calcification",
-          "Architectural distortion",
-          "Asymmetry",
-          "Lymph node",
-          "Local asymmetry",
-          "Nipple retraction",
-          "Skin retraction",
-          "Skin thickening"
-        ],
-
-        datasets: [{
-          data: [
-            2345,
-            830,
-            315,
-            270,
-            43,
-            453,
-            4,
-            53,
-            543
-          ],
-
-          backgroundColor: "rgba(99, 20, 54, 0.45)",
-          borderColor: "rgba(99, 20, 54, 0.6)",
-          borderWidth: 1,
-          borderRadius: 6,
-        }]
-      },
-
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-
-        plugins: {
-          legend: {
-            display: false
-          },
-
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return "Findings: " + context.parsed.y;
-              }
-            }
-          }
-        },
-
-        scales: {
-          x: {
-            grid: {
-              display: false
-            },
-
-            ticks: {
-              autoSkip: false,
-              maxRotation: 55,
-              minRotation: 55
-            },
-
-            // ВАЖНО: фиксируем высоту X-axis
-            afterFit: function(scale) {
-              scale.height = commonXAxisHeight;
-            }
-          },
-
-          y: {
-            ...commonYScale,
-
-            title: {
-              display: true,
-              text: "Number of findings"
-            }
-          }
-        }
-      }
-    });
-  }
 const datasetsCanvas = document.getElementById("datasets");
 
 if (datasetsCanvas) {
-
-  const doughnut3D = {
-    id: "doughnut3D",
-
-    beforeDatasetDraw(chart, args) {
-      if (args.index !== 0) return;
-
-      const ctx = chart.ctx;
-      const meta = chart.getDatasetMeta(0);
-
-      ctx.save();
-
-      // нижняя "толщина"
-      for (let depth = 14; depth > 0; depth--) {
-
-        meta.data.forEach((arc, index) => {
-
-          const props = arc.getProps(
-            [
-              "x",
-              "y",
-              "startAngle",
-              "endAngle",
-              "innerRadius",
-              "outerRadius"
-            ],
-            true
-          );
-
-          ctx.beginPath();
-
-          ctx.arc(
-            props.x,
-            props.y + depth,
-            props.outerRadius,
-            props.startAngle,
-            props.endAngle
-          );
-
-          ctx.arc(
-            props.x,
-            props.y + depth,
-            props.innerRadius,
-            props.endAngle,
-            props.startAngle,
-            true
-          );
-
-          ctx.closePath();
-
-          ctx.fillStyle = [
-            "rgba(150, 10, 80, 0.55)",
-            "rgba(30, 120, 170, 0.55)",
-            "rgba(180, 120, 30, 0.55)",
-            "rgba(80, 55, 150, 0.55)"
-          ][index];
-
-          ctx.fill();
-        });
-      }
-
-      ctx.restore();
-    }
-  };
-
-
   new Chart(datasetsCanvas, {
-
-    type: "doughnut",
-
-    plugins: [
-      doughnut3D
-    ],
+    type: "bar",
 
     data: {
-
-      labels: [
-        "NLBS",
-        "INbreast",
-        "CMMD",
-        "CSOW-CC"
-      ],
+      labels: ["MammoAtlas"],
 
       datasets: [
         {
-          label: "Included in MammoAtlas",
-
-          data: [
-            176,
-            84,
-            173,
-            300
-          ],
-          
-          backgroundColor: [
-            "rgba(214, 16, 110, 0.85)",
-            "rgba(214, 16, 110, 0.65)",
-            "rgba(214, 16, 110, 0.45)",
-            "rgba(214, 16, 110, 0.28)"
-          ],
-                    
-          borderColor: [
-            "rgba(190, 70, 120, 1)",
-            "rgba(80, 140, 180, 1)",
-            "rgba(200, 155, 85, 1)",
-            "rgba(120, 105, 165, 1)"
-          ],
-
-          borderWidth: 2,
-
-          hoverOffset: 12
+          label: "NLBS",
+          data: [176],
+          backgroundColor: "rgba(190, 70, 120, 0.75)",
+          borderWidth: 0,
+          barThickness: 80
+        },
+        {
+          label: "INbreast",
+          data: [84],
+          backgroundColor: "rgba(105, 145, 170, 0.75)",
+          borderWidth: 0,
+          barThickness: 80
+        },
+        {
+          label: "CMMD",
+          data: [173],
+          backgroundColor: "rgba(190, 155, 95, 0.75)",
+          borderWidth: 0,
+          barThickness: 80
+        },
+        {
+          label: "CSAW-CC",
+          data: [300],
+          backgroundColor: "rgba(125, 110, 155, 0.75)",
+          borderWidth: 0,
+          barThickness: 80
         }
       ]
     },
 
     options: {
+      indexAxis: "y",
 
       responsive: true,
       maintainAspectRatio: false,
 
-      cutout: "52%",
-
-      layout: {
-        padding: {
-          bottom: 20
-        }
-      },
-
       plugins: {
-
         legend: {
           display: true,
-          position: "right",
+          position: "top",
 
           labels: {
             usePointStyle: true,
-            pointStyle: "circle",
+            pointStyle: "rectRounded",
+            padding: 20,
 
             font: {
               size: 14,
@@ -1234,38 +1063,66 @@ if (datasetsCanvas) {
         },
 
         tooltip: {
-
           callbacks: {
-
             label: function(context) {
+              const value = context.raw;
+              const total = 733;
 
-              const value = context.parsed;
-
-              const total =
-                context.dataset.data.reduce(
-                  (sum, item) => sum + item,
-                  0
-                );
-
-              const percent =
-                (value / total * 100).toFixed(1);
+              const percent = (
+                value / total * 100
+              ).toFixed(1);
 
               return (
-                context.label +
+                context.dataset.label +
                 ": " +
                 value +
-                " (" +
+                " studies (" +
                 percent +
                 "%)"
               );
             }
           }
         }
+      },
+
+      scales: {
+        x: {
+          stacked: true,
+          beginAtZero: true,
+          max: 733,
+
+          grid: {
+            display: false
+          },
+
+          ticks: {
+            display: false
+          },
+
+          border: {
+            display: false
+          }
+        },
+
+        y: {
+          stacked: true,
+
+          grid: {
+            display: false
+          },
+
+          border: {
+            display: false
+          },
+
+          ticks: {
+            display: false
+          }
+        }
       }
     }
   });
 }
-
 
 </script>
 
