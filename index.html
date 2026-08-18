@@ -182,6 +182,93 @@
     ]
   }
   </script>
+
+<style>
+  /* =====================================================
+     DICOM VIEWER
+     ===================================================== */
+  .dicom-viewer-card {
+    background: #111;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  .dicom-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: #ffffff;
+    border: 1px solid #e7e7e7;
+    border-bottom: 0;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .dicom-toolbar .button.is-active {
+    background: #d6106e;
+    border-color: #d6106e;
+    color: #fff;
+  }
+
+  .dicom-opacity-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    font-size: 0.9rem;
+  }
+
+  .dicom-opacity-control input {
+    width: 150px;
+  }
+
+  #layerGroup0 {
+    position: relative;
+    width: 100%;
+    height: 650px;
+    min-height: 420px;
+    overflow: hidden;
+    background: #050505;
+  }
+
+  #layerGroup0 > div,
+  #layerGroup0 canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  #dicom-status {
+    padding: 10px 14px;
+    background: #171717;
+    color: #d8d8d8;
+    font-size: 0.9rem;
+  }
+
+  #dicom-status.is-error {
+    color: #ffb3b3;
+  }
+
+  .dicom-path-note {
+    margin-top: 12px;
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    #layerGroup0 {
+      height: 520px;
+    }
+
+    .dicom-opacity-control {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+</style>
+
 </head>
 <body>
 
@@ -596,6 +683,81 @@
   </div>
 </section>
 <!-- End video carousel -->
+
+
+
+<!-- DICOM viewer -->
+<section class="section" id="dicom-viewer">
+  <div class="container is-max-desktop">
+    <div class="has-text-centered" style="margin-bottom: 1.5rem;">
+      <h2 class="title is-3">DICOM Viewer</h2>
+      <div class="content">
+        <p>
+          Interactive preview of the original mammogram with the corresponding
+          DICOM SEG annotation overlay.
+        </p>
+      </div>
+    </div>
+
+    <div class="dicom-toolbar">
+      <button
+        class="button is-small is-active"
+        id="dicom-tool-wl"
+        type="button"
+        onclick="setDicomTool('WindowLevel')"
+      >
+        Window / Level
+      </button>
+
+      <button
+        class="button is-small"
+        id="dicom-tool-zoom"
+        type="button"
+        onclick="setDicomTool('ZoomAndPan')"
+      >
+        Zoom / Pan
+      </button>
+
+      <button
+        class="button is-small"
+        type="button"
+        onclick="resetDicomViewer()"
+      >
+        Reset
+      </button>
+
+      <div class="dicom-opacity-control">
+        <label for="dicom-seg-opacity">
+          SEG opacity
+        </label>
+        <input
+          id="dicom-seg-opacity"
+          type="range"
+          min="0"
+          max="1"
+          step="0.05"
+          value="0.55"
+          oninput="setDicomSegOpacity(this.value)"
+        >
+        <span id="dicom-seg-opacity-value">55%</span>
+      </div>
+    </div>
+
+    <div class="dicom-viewer-card">
+      <div id="layerGroup0" aria-label="Interactive DICOM viewer"></div>
+      <div id="dicom-status">
+        Loading DICOM image…
+      </div>
+    </div>
+
+    <p class="dicom-path-note">
+      Viewer files:
+      <code>static/dicom/MammoAtlas_sample.dcm</code> and
+      <code>static/dicom/MammoAtlas_sample_seg.dcm</code>.
+    </p>
+  </div>
+</section>
+<!-- End DICOM viewer -->
 
 
 <!-- JSON viewer -->
@@ -1273,6 +1435,214 @@ if (datasetsCanvas) {
 }
 
 </script>
+
+
+<script type="module">
+  import {
+    App,
+    AppOptions,
+    ViewConfig,
+    ToolConfig
+  } from "https://esm.sh/dwv@0.36.4";
+
+  const DICOM_IMAGE_URL =
+    "static/dicom/MammoAtlas_sample.dcm";
+
+  const DICOM_SEG_URL =
+    "static/dicom/MammoAtlas_sample_seg.dcm";
+
+  const statusElement =
+    document.getElementById("dicom-status");
+
+  const opacityInput =
+    document.getElementById("dicom-seg-opacity");
+
+  const opacityValue =
+    document.getElementById("dicom-seg-opacity-value");
+
+  const viewConfig =
+    new ViewConfig("layerGroup0");
+
+  const viewConfigs = {
+    "*": [viewConfig]
+  };
+
+  const options =
+    new AppOptions(viewConfigs);
+
+  options.tools = {
+    WindowLevel: new ToolConfig(),
+    ZoomAndPan: new ToolConfig()
+  };
+
+  const dicomApp =
+    new App();
+
+  dicomApp.init(options);
+
+  let loadingStage = "image";
+  let segLoaded = false;
+
+  function setStatus(message, isError = false) {
+    statusElement.textContent = message;
+    statusElement.classList.toggle("is-error", isError);
+  }
+
+  function getSegLayer() {
+    const layers =
+      dicomApp.getViewLayers();
+
+    if (!layers || layers.length < 2) {
+      return null;
+    }
+
+    return layers[layers.length - 1];
+  }
+
+  function activateBaseLayer() {
+    const layerGroup =
+      dicomApp.getLayerGroupByDivId("layerGroup0");
+
+    if (
+      layerGroup &&
+      layerGroup.getNumberOfLayers() > 0
+    ) {
+      layerGroup.setActiveLayer(0);
+    }
+  }
+
+  window.setDicomTool = function(toolName) {
+    activateBaseLayer();
+    dicomApp.setTool(toolName);
+
+    document
+      .querySelectorAll(
+        "#dicom-viewer .dicom-toolbar .button"
+      )
+      .forEach(button => {
+        button.classList.remove("is-active");
+      });
+
+    const buttonId =
+      toolName === "WindowLevel"
+        ? "dicom-tool-wl"
+        : "dicom-tool-zoom";
+
+    const activeButton =
+      document.getElementById(buttonId);
+
+    if (activeButton) {
+      activeButton.classList.add("is-active");
+    }
+  };
+
+  window.resetDicomViewer = function() {
+    dicomApp.resetDisplay();
+    activateBaseLayer();
+    dicomApp.setTool("WindowLevel");
+  };
+
+  window.setDicomSegOpacity = function(value) {
+    const alpha =
+      Math.min(
+        Math.max(parseFloat(value), 0),
+        1
+      );
+
+    opacityValue.textContent =
+      `${Math.round(alpha * 100)}%`;
+
+    const segLayer =
+      getSegLayer();
+
+    if (!segLayer) {
+      return;
+    }
+
+    segLayer.setOpacity(alpha);
+    segLayer.setFillOpacity(alpha);
+    activateBaseLayer();
+  };
+
+  dicomApp.addEventListener(
+    "load",
+    function() {
+      if (loadingStage === "image") {
+        loadingStage = "seg";
+
+        setStatus(
+          "Mammogram loaded. Loading DICOM SEG overlay…"
+        );
+
+        dicomApp.loadURLs([
+          DICOM_SEG_URL
+        ]);
+
+        return;
+      }
+
+      segLoaded = true;
+
+      dicomApp.fitToContainer();
+      activateBaseLayer();
+      dicomApp.setTool("WindowLevel");
+
+      window.setDicomSegOpacity(
+        opacityInput.value
+      );
+
+      setStatus(
+        "Mammogram + DICOM SEG loaded. Drag to adjust window/level; use Zoom / Pan for navigation."
+      );
+    }
+  );
+
+  dicomApp.addEventListener(
+    "error",
+    function(event) {
+      console.error(
+        "DICOM viewer error:",
+        event
+      );
+
+      if (loadingStage === "seg") {
+        setStatus(
+          "The mammogram was loaded, but the DICOM SEG file could not be loaded. Check static/dicom/MammoAtlas_sample_seg.dcm.",
+          true
+        );
+
+        dicomApp.fitToContainer();
+        activateBaseLayer();
+
+        return;
+      }
+
+      setStatus(
+        "DICOM sample could not be loaded. Check static/dicom/MammoAtlas_sample.dcm and serve the page through GitHub Pages or another HTTP server.",
+        true
+      );
+    }
+  );
+
+  window.addEventListener(
+    "resize",
+    function() {
+      if (
+        dicomApp.getViewLayers().length > 0
+      ) {
+        dicomApp.fitToContainer();
+      }
+    }
+  );
+
+  // Load the mammogram first. The SEG object is then loaded
+  // as a second dataset into the same layer group, producing
+  // an overlay when the geometries reference the same image.
+  dicomApp.loadURLs([
+    DICOM_IMAGE_URL
+  ]);
+</script>
+
 
 </body>
   </html>
