@@ -300,6 +300,107 @@
   .dicom-path-note code {
     word-break: break-word;
   }
+
+  /* =====================================================
+     DICOM SEG LEGEND
+     ===================================================== */
+
+  .dicom-legend {
+    display: none;
+    padding: 14px 16px 16px;
+    background: #ffffff;
+    border-left: 1px solid #e7e7e7;
+    border-right: 1px solid #e7e7e7;
+  }
+
+  .dicom-legend.has-segments {
+    display: block;
+  }
+
+  .dicom-legend-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .dicom-legend-title {
+    margin: 0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #666666;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .dicom-legend-subtitle {
+    margin: 0;
+    color: #9a9a9a;
+    font-size: 0.78rem;
+  }
+
+  .dicom-legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+  }
+
+  .dicom-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    padding: 6px 10px 6px 7px;
+    border: 1px solid #eeeeee;
+    border-radius: 999px;
+    background: #fafafa;
+    color: #333333;
+    font-size: 0.86rem;
+    line-height: 1;
+  }
+
+  .dicom-legend-swatch {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 17px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+      0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+
+  .dicom-legend-label {
+    font-weight: 600;
+  }
+
+  .dicom-legend-id,
+  .dicom-legend-hex {
+    color: #8a8a8a;
+    font-size: 0.75rem;
+  }
+
+  .dicom-legend-hex {
+    font-family: monospace;
+  }
+
+  @media (max-width: 768px) {
+    .dicom-legend-header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .dicom-legend-item {
+      max-width: 100%;
+    }
+
+    .dicom-legend-label {
+      overflow-wrap: anywhere;
+    }
+  }
+
   @media (max-width: 900px) {
     .dicom-opacity-control {
       width: 100%;
@@ -728,6 +829,24 @@
         </div>
       </div>
 
+      <div
+        id="dicom-legend"
+        class="dicom-legend"
+        aria-label="DICOM SEG findings legend"
+      >
+        <div class="dicom-legend-header">
+          <p class="dicom-legend-title">DICOM SEG findings</p>
+          <p class="dicom-legend-subtitle">
+            Colors are read from the current DICOM SEG
+          </p>
+        </div>
+
+        <div
+          id="dicom-legend-items"
+          class="dicom-legend-items"
+        ></div>
+      </div>
+
       <div class="dicom-viewer-card">
         <div id="layerGroup0" tabindex="0" aria-label="Interactive DICOM viewer">
           <div id="dicom-loading-overlay" class="dicom-loading-overlay">Loading DICOM image…</div>
@@ -741,6 +860,8 @@
       <p class="dicom-path-note">
         Add more pairs in the <code>DICOM_SAMPLES</code> array at the bottom of this page.
         Each item contains one mammogram DICOM and its corresponding DICOM SEG.
+        The legend maps <code>SegmentNumber</code> to the MammoAtlas category id;
+        segment colors are read from the DICOM SEG metadata.
       </p>
     </div>
   </div>
@@ -862,7 +983,7 @@ function copyAnnotationJSON() {
         <div class="content">
 
           <p>
-            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
             You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
             Commons Attribution-ShareAlike 4.0 International License</a>.
           </p>
@@ -1443,6 +1564,50 @@ if (datasetsCanvas) {
   // Add as many image + SEG pairs as you need.
   // The selector and navigation arrows are generated automatically.
 
+
+  // =====================================================
+  // MAMMOATLAS SEGMENT CATEGORIES
+  // =====================================================
+  //
+  // DICOM SEG SegmentNumber is mapped to the same category id
+  // used in the MammoAtlas annotations.
+
+  const CATEGORIES = {
+    1: {
+      name: "mass",
+      label: "Mass"
+    },
+    2: {
+      name: "calcification",
+      label: "Calcification"
+    },
+    3: {
+      name: "lymph_node",
+      label: "Lymph node"
+    },
+    4: {
+      name: "architectural_distortion",
+      label: "Architectural distortion"
+    },
+    5: {
+      name: "nipple_retraction",
+      label: "Nipple retraction"
+    },
+    6: {
+      name: "skin_thickening",
+      label: "Skin thickening"
+    },
+    7: {
+      name: "skin_retraction",
+      label: "Skin retraction"
+    },
+    8: {
+      name: "asymmetric_breast_tissue",
+      label: "Asymmetric breast tissue"
+    }
+  };
+
+
   const DICOM_SAMPLES = [
     {
       label: "sop 1.2.840.113619.2.227.20792262428.1976090730145742.323",
@@ -1482,6 +1647,8 @@ if (datasetsCanvas) {
   const zoomButton = document.getElementById("dicom-tool-zoom");
   const opacityInput = document.getElementById("dicom-seg-opacity");
   const opacityValue = document.getElementById("dicom-seg-opacity-value");
+  const legendElement = document.getElementById("dicom-legend");
+  const legendItemsElement = document.getElementById("dicom-legend-items");
 
   let dicomApp = null;
   let currentSampleIndex = 0;
@@ -1532,6 +1699,228 @@ if (datasetsCanvas) {
     zoomButton.classList.toggle("is-active", toolName === "ZoomAndPan");
   }
 
+
+  // =====================================================
+  // DICOM SEG LEGEND
+  // =====================================================
+
+  function clearDicomLegend() {
+    legendItemsElement.replaceChildren();
+    legendElement.classList.remove("has-segments");
+  }
+
+
+  function clampRgbValue(value) {
+    return Math.max(
+      0,
+      Math.min(
+        255,
+        Math.round(Number(value) || 0)
+      )
+    );
+  }
+
+
+  function rgbToCss(rgb) {
+    if (!rgb) {
+      return "rgb(160, 160, 160)";
+    }
+
+    const r = clampRgbValue(rgb.r);
+    const g = clampRgbValue(rgb.g);
+    const b = clampRgbValue(rgb.b);
+
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+
+  function rgbToHex(rgb) {
+    if (!rgb) {
+      return "#A0A0A0";
+    }
+
+    const toHex = value =>
+      clampRgbValue(value)
+        .toString(16)
+        .padStart(2, "0")
+        .toUpperCase();
+
+    return (
+      "#" +
+      toHex(rgb.r) +
+      toHex(rgb.g) +
+      toHex(rgb.b)
+    );
+  }
+
+
+  function getDicomSegSegments() {
+    if (!dicomApp) {
+      return [];
+    }
+
+    const dataIds =
+      dicomApp.getDataIds();
+
+    for (const dataId of dataIds) {
+      const data =
+        dicomApp.getData(dataId);
+
+      if (
+        !data ||
+        !data.image
+      ) {
+        continue;
+      }
+
+      const meta =
+        data.image.getMeta();
+
+      const segments =
+        meta &&
+        meta.custom &&
+        meta.custom.segments;
+
+      if (
+        Array.isArray(segments) &&
+        segments.length > 0
+      ) {
+        return segments;
+      }
+    }
+
+    return [];
+  }
+
+
+  function getCategoryForSegment(segment) {
+    const segmentNumber =
+      Number(segment.number);
+
+    const category =
+      CATEGORIES[segmentNumber];
+
+    if (category) {
+      return {
+        id: segmentNumber,
+        name: category.name,
+        label: category.label
+      };
+    }
+
+    return {
+      id: segmentNumber,
+      name:
+        segment.label ||
+        `segment_${segmentNumber}`,
+      label:
+        segment.label ||
+        `Segment ${segmentNumber}`
+    };
+  }
+
+
+  function renderDicomLegend() {
+    clearDicomLegend();
+
+    const segments =
+      getDicomSegSegments();
+
+    if (segments.length === 0) {
+      return;
+    }
+
+    const orderedSegments =
+      [...segments].sort(
+        (a, b) =>
+          Number(a.number) -
+          Number(b.number)
+      );
+
+    for (const segment of orderedSegments) {
+      const category =
+        getCategoryForSegment(segment);
+
+      const rgb =
+        segment.displayRGBValue;
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "dicom-legend-item";
+
+      item.dataset.segmentNumber =
+        String(segment.number);
+
+      item.dataset.categoryId =
+        String(category.id);
+
+      item.dataset.categoryName =
+        category.name;
+
+      item.title =
+        `category_id=${category.id} · ${category.name}`;
+
+
+      const swatch =
+        document.createElement("span");
+
+      swatch.className =
+        "dicom-legend-swatch";
+
+      swatch.style.backgroundColor =
+        rgbToCss(rgb);
+
+
+      const label =
+        document.createElement("span");
+
+      label.className =
+        "dicom-legend-label";
+
+      label.textContent =
+        category.label;
+
+
+      const categoryId =
+        document.createElement("span");
+
+      categoryId.className =
+        "dicom-legend-id";
+
+      categoryId.textContent =
+        `#${category.id}`;
+
+
+      const hex =
+        document.createElement("span");
+
+      hex.className =
+        "dicom-legend-hex";
+
+      hex.textContent =
+        rgbToHex(rgb);
+
+
+      item.append(
+        swatch,
+        label,
+        categoryId,
+        hex
+      );
+
+      legendItemsElement.appendChild(
+        item
+      );
+    }
+
+    legendElement.classList.add(
+      "has-segments"
+    );
+  }
+
+
   function getLayerGroup() {
     if (!dicomApp) return null;
     return dicomApp.getLayerGroupByDivId("layerGroup0");
@@ -1561,6 +1950,8 @@ if (datasetsCanvas) {
 
   function createViewer(sample) {
     const generation = ++viewerGeneration;
+
+    clearDicomLegend();
 
     if (dicomApp) {
       try {
@@ -1634,6 +2025,7 @@ if (datasetsCanvas) {
         updateActiveToolButton("WindowLevel");
         setViewerControlsEnabled(true);
         window.setDicomSegOpacity(opacityInput.value);
+        renderDicomLegend();
         setCaseLoading(false);
         setStatus(`${sample.label}: mammogram + DICOM SEG loaded`);
       }
@@ -1645,6 +2037,7 @@ if (datasetsCanvas) {
 
       if (loadingStage === "seg") {
         loadingStage = "done";
+        clearDicomLegend();
         fitCurrentViewer();
         activateBaseLayer();
         setViewerControlsEnabled(true);
