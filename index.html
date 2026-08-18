@@ -385,6 +385,50 @@
     font-family: monospace;
   }
 
+  .dicom-legend-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  .dicom-legend-actions .button {
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  .dicom-legend-item {
+    cursor: pointer;
+    user-select: none;
+    transition:
+      opacity 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  .dicom-legend-item:hover {
+    background: #f4f4f4;
+    border-color: #dddddd;
+  }
+
+  .dicom-legend-item.is-hidden-segment {
+    opacity: 0.42;
+    background: #f6f6f6;
+  }
+
+  .dicom-legend-checkbox {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    flex: 0 0 15px;
+    accent-color: #d6106e;
+    cursor: pointer;
+  }
+
+  .dicom-legend-item.is-hidden-segment .dicom-legend-swatch {
+    filter: grayscale(0.8);
+  }
+
   @media (max-width: 768px) {
     .dicom-legend-header {
       align-items: flex-start;
@@ -398,6 +442,11 @@
 
     .dicom-legend-label {
       overflow-wrap: anywhere;
+    }
+
+    .dicom-legend-actions {
+      width: 100%;
+      margin-left: 0;
     }
   }
 
@@ -605,10 +654,10 @@
         <div class="content has-text-justified">
           <!-- TODO: Replace with your paper abstract -->
           <p style="font-size: 1.2rem; text-align: center;">
-            <strong>733 patients · 2932 mammograms · 9 findings · X masks · DICOM SEG</strong>
+            <strong>733 patients · 2932 mammograms · 8 findings · X masks · DICOM SEG</strong>
           </p>
           <p>
-            Mammography dataset with pixel-level annotations for 9 findings, breast-level ACR density and BI-RADS assessment, distributed with original DICOM images and DICOM SEG annotations.
+            Mammography dataset with pixel-level annotations for 8 findings, breast-level ACR density and BI-RADS assessment, distributed with original DICOM images and DICOM SEG annotations.
           </p>
         </div>
       </div>
@@ -835,10 +884,32 @@
         aria-label="DICOM SEG findings legend"
       >
         <div class="dicom-legend-header">
-          <p class="dicom-legend-title">DICOM SEG findings</p>
-          <p class="dicom-legend-subtitle">
-            Colors are read from the current DICOM SEG
-          </p>
+          <div>
+            <p class="dicom-legend-title">DICOM SEG findings</p>
+            <p class="dicom-legend-subtitle">
+              Select which findings are visible
+            </p>
+          </div>
+
+          <div class="dicom-legend-actions">
+            <button
+              class="button is-small"
+              id="dicom-show-all-segments"
+              type="button"
+              onclick="showAllDicomSegments()"
+            >
+              Show all
+            </button>
+
+            <button
+              class="button is-small"
+              id="dicom-hide-all-segments"
+              type="button"
+              onclick="hideAllDicomSegments()"
+            >
+              Hide all
+            </button>
+          </div>
         </div>
 
         <div
@@ -860,8 +931,9 @@
       <p class="dicom-path-note">
         Add more pairs in the <code>DICOM_SAMPLES</code> array at the bottom of this page.
         Each item contains one mammogram DICOM and its corresponding DICOM SEG.
-        The legend maps <code>SegmentNumber</code> to the MammoAtlas category id;
-        segment colors are read from the DICOM SEG metadata.
+        The legend maps <code>SegmentNumber</code> to the MammoAtlas category id.
+        Colors are read from the DICOM SEG metadata, and each finding can be
+        independently shown or hidden.
       </p>
     </div>
   </div>
@@ -1555,7 +1627,8 @@ if (datasetsCanvas) {
     App,
     AppOptions,
     ViewConfig,
-    ToolConfig
+    ToolConfig,
+    MaskSegmentViewHelper
   } from "https://esm.sh/dwv@0.36.4";
 
   // =====================================================
@@ -1649,10 +1722,19 @@ if (datasetsCanvas) {
   const opacityValue = document.getElementById("dicom-seg-opacity-value");
   const legendElement = document.getElementById("dicom-legend");
   const legendItemsElement = document.getElementById("dicom-legend-items");
+  const showAllSegmentsButton =
+    document.getElementById("dicom-show-all-segments");
+  const hideAllSegmentsButton =
+    document.getElementById("dicom-hide-all-segments");
 
   let dicomApp = null;
   let currentSampleIndex = 0;
   let viewerGeneration = 0;
+
+  // Controls visibility of individual DICOM SEG segments.
+  // It is recreated for every mammogram so hidden findings
+  // never leak into the next case.
+  let maskViewHelper = new MaskSegmentViewHelper();
 
   function setStatus(message, isError = false) {
     statusTextElement.textContent = message;
@@ -1676,6 +1758,12 @@ if (datasetsCanvas) {
     zoomButton.disabled = !enabled;
     resetButton.disabled = !enabled;
     opacityInput.disabled = !enabled;
+
+    showAllSegmentsButton.disabled =
+      !enabled;
+
+    hideAllSegmentsButton.disabled =
+      !enabled;
   }
 
   function buildSampleSelector() {
@@ -1820,6 +1908,110 @@ if (datasetsCanvas) {
   }
 
 
+  function getSegViewController() {
+    const segLayer = getSegLayer();
+
+    if (!segLayer) {
+      return null;
+    }
+
+    const controller =
+      segLayer.getViewController();
+
+    if (
+      !controller ||
+      !controller.isMask()
+    ) {
+      return null;
+    }
+
+    return controller;
+  }
+
+
+  function applyMaskViewHelper() {
+    const controller =
+      getSegViewController();
+
+    if (!controller) {
+      return;
+    }
+
+    controller.setMaskViewHelper(
+      maskViewHelper
+    );
+  }
+
+
+  function setLegendItemVisible(
+    segmentNumber,
+    visible
+  ) {
+    const checkbox =
+      legendItemsElement.querySelector(
+        `input[data-segment-number="${segmentNumber}"]`
+      );
+
+    const item =
+      legendItemsElement.querySelector(
+        `.dicom-legend-item[data-segment-number="${segmentNumber}"]`
+      );
+
+    if (checkbox) {
+      checkbox.checked =
+        visible;
+    }
+
+    if (item) {
+      item.classList.toggle(
+        "is-hidden-segment",
+        !visible
+      );
+    }
+  }
+
+
+  function setSegmentVisibility(
+    segmentNumber,
+    visible,
+    redraw = true
+  ) {
+    const number =
+      Number(segmentNumber);
+
+    if (!Number.isFinite(number)) {
+      return;
+    }
+
+    if (visible) {
+      if (
+        maskViewHelper.isHidden(number)
+      ) {
+        maskViewHelper.removeFromHidden(
+          number
+        );
+      }
+    } else {
+      if (
+        !maskViewHelper.isHidden(number)
+      ) {
+        maskViewHelper.addToHidden(
+          number
+        );
+      }
+    }
+
+    setLegendItemVisible(
+      number,
+      visible
+    );
+
+    if (redraw) {
+      applyMaskViewHelper();
+    }
+  }
+
+
   function renderDicomLegend() {
     clearDicomLegend();
 
@@ -1838,20 +2030,24 @@ if (datasetsCanvas) {
       );
 
     for (const segment of orderedSegments) {
+      const segmentNumber =
+        Number(segment.number);
+
       const category =
         getCategoryForSegment(segment);
 
       const rgb =
         segment.displayRGBValue;
 
+      // A label makes the whole pill clickable.
       const item =
-        document.createElement("div");
+        document.createElement("label");
 
       item.className =
         "dicom-legend-item";
 
       item.dataset.segmentNumber =
-        String(segment.number);
+        String(segmentNumber);
 
       item.dataset.categoryId =
         String(category.id);
@@ -1861,6 +2057,40 @@ if (datasetsCanvas) {
 
       item.title =
         `category_id=${category.id} · ${category.name}`;
+
+
+      const checkbox =
+        document.createElement("input");
+
+      checkbox.type =
+        "checkbox";
+
+      checkbox.className =
+        "dicom-legend-checkbox";
+
+      checkbox.checked =
+        !maskViewHelper.isHidden(
+          segmentNumber
+        );
+
+      checkbox.dataset.segmentNumber =
+        String(segmentNumber);
+
+      checkbox.setAttribute(
+        "aria-label",
+        `Toggle ${category.label}`
+      );
+
+      checkbox.addEventListener(
+        "change",
+        function() {
+          setSegmentVisibility(
+            segmentNumber,
+            checkbox.checked,
+            true
+          );
+        }
+      );
 
 
       const swatch =
@@ -1904,6 +2134,7 @@ if (datasetsCanvas) {
 
 
       item.append(
+        checkbox,
         swatch,
         label,
         categoryId,
@@ -1913,12 +2144,64 @@ if (datasetsCanvas) {
       legendItemsElement.appendChild(
         item
       );
+
+      setLegendItemVisible(
+        segmentNumber,
+        checkbox.checked
+      );
     }
 
     legendElement.classList.add(
       "has-segments"
     );
+
+    // Connect the helper to the mask view after the SEG layer exists.
+    applyMaskViewHelper();
   }
+
+
+  window.toggleDicomSegment =
+    function(segmentNumber, visible) {
+      setSegmentVisibility(
+        segmentNumber,
+        Boolean(visible),
+        true
+      );
+    };
+
+
+  window.showAllDicomSegments =
+    function() {
+      const segments =
+        getDicomSegSegments();
+
+      for (const segment of segments) {
+        setSegmentVisibility(
+          Number(segment.number),
+          true,
+          false
+        );
+      }
+
+      applyMaskViewHelper();
+    };
+
+
+  window.hideAllDicomSegments =
+    function() {
+      const segments =
+        getDicomSegSegments();
+
+      for (const segment of segments) {
+        setSegmentVisibility(
+          Number(segment.number),
+          false,
+          false
+        );
+      }
+
+      applyMaskViewHelper();
+    };
 
 
   function getLayerGroup() {
@@ -1952,6 +2235,10 @@ if (datasetsCanvas) {
     const generation = ++viewerGeneration;
 
     clearDicomLegend();
+
+    // Start every mammogram with all findings visible.
+    maskViewHelper =
+      new MaskSegmentViewHelper();
 
     if (dicomApp) {
       try {
@@ -2104,13 +2391,35 @@ if (datasetsCanvas) {
 
   window.resetDicomViewer = function() {
     if (!dicomApp) return;
-    const layers = dicomApp.getViewLayers();
-    if (!layers || layers.length === 0) return;
+
+    const layers =
+      dicomApp.getViewLayers();
+
+    if (
+      !layers ||
+      layers.length === 0
+    ) {
+      return;
+    }
+
     dicomApp.resetDisplay();
+
     activateBaseLayer();
-    dicomApp.setTool("WindowLevel");
-    updateActiveToolButton("WindowLevel");
-    window.setDicomSegOpacity(opacityInput.value);
+
+    dicomApp.setTool(
+      "WindowLevel"
+    );
+
+    updateActiveToolButton(
+      "WindowLevel"
+    );
+
+    window.setDicomSegOpacity(
+      opacityInput.value
+    );
+
+    // Reset also restores every finding.
+    window.showAllDicomSegments();
   };
 
   window.setDicomSegOpacity = function(value) {
