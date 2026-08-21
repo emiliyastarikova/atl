@@ -492,12 +492,13 @@
   .finding-attributes-table {
     border-collapse: collapse;
     background: #ffffff;
+    border: 2px solid #d6106e;
   }
 
   .finding-attributes-table th,
   .finding-attributes-table td {
     background: #ffffff !important;
-    border: 1px solid rgba(214, 16, 110, 0.38) !important;
+    border: 2px solid #d6106e !important;
     vertical-align: top;
   }
 
@@ -841,7 +842,7 @@
         </h3>
 
         <div class="table-container" style="display: flex; justify-content: center; width: 100%;">
-          <div style="width: 90%; max-width: 1100px; border: 2px solid #d6106e; border-radius: 16px; overflow: hidden;">
+          <div style="width: 90%; max-width: 1100px; border-radius: 16px; overflow: hidden;">
           <table class="table is-hoverable finding-attributes-table" style="font-size: 0.92rem; width: 100%; margin: 0;">
             <thead>
               <tr>
@@ -850,89 +851,107 @@
                 <th>Available attributes</th>
               </tr>
             </thead>
+
             <tbody>
 
               <tr>
-                <td><strong>1</strong></td>
-                <td><strong>Mass</strong></td>
-                <td>
-                  <strong>BI-RADS:</strong> 2, 3, 4a, 4b, 4c, 5<br>
-                  <strong>Shape:</strong> irregular, round<br>
-                  <strong>Margin:</strong> circumscribed, indistinct, microlobulated, obscured, spiculated<br>
-                  <strong>Density:</strong> equal, fatty, high<br>
-                  <strong>Track ID:</strong> unique finding identifier
-                </td>
+                <td rowspan="5" style="vertical-align: middle;"><strong>1</strong></td>
+                <td rowspan="5" style="vertical-align: middle;"><strong>Mass</strong></td>
+                <td><strong>BI-RADS:</strong> 2, 3, 4a, 4b, 4c, 5</td>
+              </tr>
+              <tr>
+                <td><strong>Shape:</strong> irregular, round</td>
+              </tr>
+              <tr>
+                <td><strong>Margin:</strong> circumscribed, indistinct, microlobulated, obscured, spiculated</td>
+              </tr>
+              <tr>
+                <td><strong>Density:</strong> equal, fatty, high</td>
+              </tr>
+              <tr>
+                <td><strong>Track ID:</strong> unique finding identifier</td>
               </tr>
 
               <tr>
-                <td><strong>2</strong></td>
-                <td><strong>Calcification</strong></td>
-                <td>
-                  <strong>BI-RADS:</strong> 2, 3, 4a, 4b, 4c, 5<br>
-                  <strong>Morphology:</strong> amorphous, empty, fine linear / branching (casting), fine pleomorphic, heterogeneous<br>
-                  <strong>Distribution:</strong> grouped, linear, regional, segmental, single<br>
-                  <strong>Type:</strong> benign, suspicious<br>
-                  <strong>Track ID:</strong> unique finding identifier
-                </td>
+                <td rowspan="5" style="vertical-align: middle;"><strong>2</strong></td>
+                <td rowspan="5" style="vertical-align: middle;"><strong>Calcification</strong></td>
+                <td><strong>BI-RADS:</strong> 2, 3, 4a, 4b, 4c, 5</td>
+              </tr>
+              <tr>
+                <td><strong>Morphology:</strong> amorphous, empty, fine linear / branching (casting), fine pleomorphic, heterogeneous</td>
+              </tr>
+              <tr>
+                <td><strong>Distribution:</strong> grouped, linear, regional, segmental, single</td>
+              </tr>
+              <tr>
+                <td><strong>Type:</strong> benign, suspicious</td>
+              </tr>
+              <tr>
+                <td><strong>Track ID:</strong> unique finding identifier</td>
               </tr>
 
               <tr>
-                <td><strong>3</strong></td>
-                <td><strong>Lymph node</strong></td>
-                <td>
-                  <strong>BI-RADS:</strong> 2, 4b<br>
-                  <strong>Location:</strong> axillary, intramammary<br>
-                  <strong>Density:</strong> equal, high<br>
-                  <strong>Margin:</strong> circumscribed, indistinct<br>
-                  <strong>Fatty hilum:</strong> False, True<br>
-                  <strong>Track ID:</strong> unique finding identifier
-                </td>
+                <td rowspan="6" style="vertical-align: middle;"><strong>3</strong></td>
+                <td rowspan="6" style="vertical-align: middle;"><strong>Lymph node</strong></td>
+                <td><strong>BI-RADS:</strong> 2, 4b</td>
+              </tr>
+              <tr>
+                <td><strong>Location:</strong> axillary, intramammary</td>
+              </tr>
+              <tr>
+                <td><strong>Density:</strong> equal, high</td>
+              </tr>
+              <tr>
+                <td><strong>Margin:</strong> circumscribed, indistinct</td>
+              </tr>
+              <tr>
+                <td><strong>Fatty hilum:</strong> False, True</td>
+              </tr>
+              <tr>
+                <td><strong>Track ID:</strong> unique finding identifier</td>
               </tr>
 
               <tr>
-                <td><strong>4</strong></td>
-                <td><strong>Architectural distortion</strong></td>
-                <td>
-                  <strong>BI-RADS:</strong> 4a, 4b, 4c<br>
-                  <strong>Track ID:</strong> unique finding identifier
-                </td>
+                <td rowspan="2" style="vertical-align: middle;"><strong>4</strong></td>
+                <td rowspan="2" style="vertical-align: middle;"><strong>Architectural distortion</strong></td>
+                <td><strong>BI-RADS:</strong> 4a, 4b, 4c</td>
+              </tr>
+              <tr>
+                <td><strong>Track ID:</strong> unique finding identifier</td>
               </tr>
 
               <tr>
-                <td><strong>5</strong></td>
-                <td><strong>Nipple retraction</strong></td>
-                <td>
-                  <strong>Track ID:</strong> unique finding identifier
-                </td>
+                <td style="vertical-align: middle;"><strong>5</strong></td>
+                <td style="vertical-align: middle;"><strong>Nipple retraction</strong></td>
+                <td><strong>Track ID:</strong> unique finding identifier</td>
               </tr>
 
               <tr>
-                <td><strong>6</strong></td>
-                <td><strong>Skin thickening</strong></td>
-                <td>
-                  <strong>Track ID:</strong> unique finding identifier
-                </td>
+                <td style="vertical-align: middle;"><strong>6</strong></td>
+                <td style="vertical-align: middle;"><strong>Skin thickening</strong></td>
+                <td><strong>Track ID:</strong> unique finding identifier</td>
               </tr>
 
               <tr>
-                <td><strong>7</strong></td>
-                <td><strong>Skin retraction</strong></td>
-                <td>
-                  <strong>Track ID:</strong> unique finding identifier
-                </td>
+                <td style="vertical-align: middle;"><strong>7</strong></td>
+                <td style="vertical-align: middle;"><strong>Skin retraction</strong></td>
+                <td><strong>Track ID:</strong> unique finding identifier</td>
               </tr>
 
               <tr>
-                <td><strong>8</strong></td>
-                <td><strong>Asymmetric breast tissue</strong></td>
-                <td>
-                  <strong>BI-RADS:</strong> 3, 4a, 4b, 4c<br>
-                  <strong>Density:</strong> equal, high, low<br>
-                  <strong>Track ID:</strong> unique finding identifier
-                </td>
+                <td rowspan="3" style="vertical-align: middle;"><strong>8</strong></td>
+                <td rowspan="3" style="vertical-align: middle;"><strong>Asymmetric breast tissue</strong></td>
+                <td><strong>BI-RADS:</strong> 3, 4a, 4b, 4c</td>
+              </tr>
+              <tr>
+                <td><strong>Density:</strong> equal, high, low</td>
+              </tr>
+              <tr>
+                <td><strong>Track ID:</strong> unique finding identifier</td>
               </tr>
 
             </tbody>
+
           </table>
           </div>
         </div>
