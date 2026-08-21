@@ -490,23 +490,17 @@
 <style>
   /* Finding attributes table */
   .finding-attributes-table {
-    width: 100%;
-    margin: 0;
     border-collapse: separate;
     border-spacing: 0;
-    table-layout: fixed;
     background: #ffffff;
   }
 
   .finding-attributes-table th,
   .finding-attributes-table td {
     background: #ffffff !important;
+    vertical-align: top;
     border-right: 3px solid #d6106e !important;
     border-bottom: 3px solid #d6106e !important;
-    padding: 0.8rem 1rem;
-    vertical-align: middle;
-    line-height: 1.45;
-    color: #333333;
   }
 
   .finding-attributes-table th:last-child,
@@ -520,59 +514,10 @@
 
   .finding-attributes-table thead th {
     background: #ffffff !important;
-    color: #d6106e;
-    font-weight: 700;
-    text-align: left;
-    padding-top: 0.95rem;
-    padding-bottom: 0.95rem;
   }
 
-  .finding-attributes-table thead th:nth-child(1),
-  .finding-attributes-table tbody td:nth-child(1) {
-    width: 14%;
-    text-align: center;
-  }
-
-  .finding-attributes-table thead th:nth-child(2) {
-    width: 26%;
-  }
-
-  .finding-attributes-table thead th:nth-child(3) {
-    width: 60%;
-  }
-
-  .finding-attributes-table tbody td[rowspan] {
-    vertical-align: middle !important;
-  }
-
-  .finding-attributes-table tbody td strong {
-    font-weight: 600;
-  }
-
-  .finding-attributes-table tbody tr:hover td {
+  .finding-attributes-table tr:hover td {
     background: #ffffff !important;
-  }
-
-  @media (max-width: 768px) {
-    .finding-attributes-table {
-      table-layout: auto;
-    }
-
-    .finding-attributes-table th,
-    .finding-attributes-table td {
-      padding: 0.65rem 0.7rem;
-      font-size: 0.84rem;
-    }
-
-    .finding-attributes-table thead th:nth-child(1),
-    .finding-attributes-table tbody td:nth-child(1) {
-      width: auto;
-    }
-
-    .finding-attributes-table thead th:nth-child(2),
-    .finding-attributes-table thead th:nth-child(3) {
-      width: auto;
-    }
   }
 </style>
 
@@ -902,12 +847,12 @@
     <!-- Annotation attributes table -->
     <div class="columns is-centered" style="margin-top: 2rem;">
       <div class="column is-full">
-        <h3 class="title is-5 has-text-centered" style="margin-bottom: 1.25rem;">
+        <h3 class="title is-5 has-text-centered">
           Finding attributes
         </h3>
 
         <div class="table-container" style="display: flex; justify-content: center; width: 100%;">
-          <div style="width: 94%; max-width: 1120px; border: 3px solid #d6106e; border-radius: 16px; overflow: hidden; background: #ffffff;">
+          <div style="width: 90%; max-width: 1100px; border: 3px solid #d6106e; border-radius: 18px; overflow: hidden;">
           <table class="table is-hoverable finding-attributes-table" style="font-size: 0.92rem; width: 100%; margin: 0;">
             <thead>
               <tr>
@@ -1021,7 +966,7 @@
           </div>
         </div>
 
-        <p class="has-text-grey is-size-7" style="margin-top: 0.9rem; text-align: center;">
+        <p class="has-text-grey is-size-7" style="margin-top: 0.75rem; text-align: center;">
           Track ID links annotations of the same finding across mammographic views.
         </p>
       </div>
