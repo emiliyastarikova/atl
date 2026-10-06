@@ -533,25 +533,19 @@
     text-align: left;
   }
 
-  .project-structure-tree {
-    margin: 1.5rem 0 0;
-    padding: 1.5rem 1.75rem;
-    background: #ffffff;
-    border: 1px solid #eeeeee;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
-    overflow-x: auto;
-  }
+.project-structure-tree {
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  overflow: hidden;
+}
 
-  .project-structure-tree pre {
-    margin: 0;
-    padding: 0;
-    background: transparent;
-    color: #363636;
-    font-size: 0.95rem;
-    line-height: 1.65;
-    overflow: visible;
-  }
+.project-structure-tree pre {
+  margin: 0;
+  border: none;
+  box-shadow: none;
+  background: #ffffff;
+  padding: 20px;
+}
 
   .project-structure-tree code {
     background: transparent;
@@ -785,12 +779,6 @@
 
         <div class="has-text-centered">
           <h2 class="title is-3">Project Structure</h2>
-          <div class="content">
-            <p>
-              MammoAtlas is organized into annotation, DICOM SEG, metadata,
-              processing, and documentation components.
-            </p>
-          </div>
         </div>
 
         <div class="project-structure-card">
