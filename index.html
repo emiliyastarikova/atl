@@ -522,6 +522,81 @@
   }
 </style>
 
+
+<style>
+  /* =====================================================
+     PROJECT STRUCTURE
+     ===================================================== */
+  .project-structure-card {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .project-structure-tree {
+    margin: 1.5rem 0 0;
+    padding: 1.5rem 1.75rem;
+    background: #ffffff;
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    overflow-x: auto;
+  }
+
+  .project-structure-tree pre {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: #363636;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    overflow: visible;
+  }
+
+  .project-structure-tree code {
+    background: transparent;
+    color: inherit;
+  }
+
+  .project-structure-description {
+    margin-top: 1.5rem;
+  }
+
+  .project-structure-item {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .project-structure-item:first-child {
+    padding-top: 0;
+  }
+
+  .project-structure-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .project-structure-item strong {
+    color: #d6106e;
+  }
+
+  .project-structure-item p {
+    margin: 0;
+    color: #4a4a4a;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .project-structure-tree {
+      padding: 1.1rem 1.25rem;
+    }
+
+    .project-structure-tree pre {
+      font-size: 0.82rem;
+    }
+  }
+</style>
+
 </head>
 <body>
 
@@ -705,14 +780,22 @@
 <!-- Project Structure -->
 <section class="section">
   <div class="container is-max-desktop">
-
     <div class="columns is-centered">
-      <div class="column is-full-width">
+      <div class="column is-four-fifths">
 
-        <h2 class="title is-3">Project Structure</h2>
+        <div class="has-text-centered">
+          <h2 class="title is-3">Project Structure</h2>
+          <div class="content">
+            <p>
+              MammoAtlas is organized into annotation, DICOM SEG, metadata,
+              processing, and documentation components.
+            </p>
+          </div>
+        </div>
 
-        <div class="project-structure">
-          <pre><code>MammoAtlas/
+        <div class="project-structure-card">
+          <div class="project-structure-tree">
+            <pre><code>MammoAtlas/
 ├── annotations/
 │   ├── masks/
 │   ├── classifications/
@@ -725,41 +808,49 @@
 ├── scripts/
 │
 └── README.md</code></pre>
-        </div>
+          </div>
 
-        <div class="project-description">
+          <div class="project-structure-description content">
+            <div class="project-structure-item">
+              <p>
+                <strong>annotations/</strong> — pixel-level lesion annotations,
+                finding classifications, and links between corresponding findings
+                across mammographic views.
+              </p>
+            </div>
 
-          <p>
-            <strong>annotations/</strong> — contains lesion annotations, including
-            pixel-level masks, finding classifications, and links between corresponding
-            findings across mammographic views.
-          </p>
+            <div class="project-structure-item">
+              <p>
+                <strong>dicom_seg/</strong> — annotations represented in DICOM SEG
+                format for visualization and use in radiological software.
+              </p>
+            </div>
 
-          <p>
-            <strong>dicom_seg/</strong> — contains annotations converted to the DICOM SEG
-            format for visualization and use in radiological software.
-          </p>
+            <div class="project-structure-item">
+              <p>
+                <strong>metadata/</strong> — study- and image-level metadata, dataset
+                source information, and associated annotation information.
+              </p>
+            </div>
 
-          <p>
-            <strong>metadata/</strong> — contains metadata describing mammography studies,
-            images, dataset sources, and associated annotation information.
-          </p>
+            <div class="project-structure-item">
+              <p>
+                <strong>scripts/</strong> — utilities for annotation processing,
+                format conversion, validation, and dataset preparation.
+              </p>
+            </div>
 
-          <p>
-            <strong>scripts/</strong> — contains utility scripts for annotation processing,
-            data conversion, validation, and dataset preparation.
-          </p>
-
-          <p>
-            <strong>README.md</strong> — provides instructions for working with the resource,
-            including the dataset organization and annotation format.
-          </p>
-
+            <div class="project-structure-item">
+              <p>
+                <strong>README.md</strong> — documentation describing the resource,
+                its organization, annotation format, and usage instructions.
+              </p>
+            </div>
+          </div>
         </div>
 
       </div>
     </div>
-
   </div>
 </section>
 <!-- End Project Structure -->
