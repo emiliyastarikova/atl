@@ -2942,72 +2942,117 @@ if (datasetsCanvas) {
 
 
 <script>
-/* Keep the existing Bulma-carousel look, but make slide switching independent
-   of Bulma's width calculations after the large-layout CSS is applied. */
-window.addEventListener('load', function () {
+/* Keep the current Bulma-carousel appearance exactly as it is.
+   Only replace slide switching with a robust delegated handler.
+   Bulma may move its navigation buttons outside #results-carousel,
+   so button clicks are captured at document level. */
+(function () {
   const carousel = document.getElementById('results-carousel');
   if (!carousel) return;
 
-  // Wait until bulma-carousel has created its navigation and slider markup.
-  setTimeout(function () {
-    const items = Array.from(carousel.querySelectorAll('.item'));
-    if (items.length < 2) return;
+  let currentIndex = 0;
+  let manualModeReady = false;
+  let uniqueSlides = [];
 
-    let current = 0;
+  function getUniqueSlides() {
+    const allItems = Array.from(carousel.querySelectorAll('.item'));
+    const seen = new Set();
+    const result = [];
 
-    // Preserve Bulma's generated viewport/navigation, but use simple visibility
-    // switching so the enlarged layout cannot break horizontal transforms.
+    allItems.forEach(function (item) {
+      const img = item.querySelector('img');
+      const key = img ? (img.getAttribute('src') || img.src) : item.textContent.trim();
+      if (!seen.has(key)) {
+        seen.add(key);
+        result.push(item);
+      }
+    });
+
+    return result;
+  }
+
+  function prepareManualMode() {
+    if (manualModeReady) return true;
+
+    uniqueSlides = getUniqueSlides();
+    if (uniqueSlides.length < 2) return false;
+
+    const allItems = Array.from(carousel.querySelectorAll('.item'));
     const slider = carousel.querySelector('.slider');
+
     if (slider) {
-      slider.style.transform = 'none';
-      slider.style.width = '100%';
-      slider.style.display = 'block';
+      slider.style.setProperty('transform', 'none', 'important');
+      slider.style.setProperty('transition', 'none', 'important');
+      slider.style.setProperty('width', '100%', 'important');
+      slider.style.setProperty('display', 'block', 'important');
     }
 
-    items.forEach(function (item, index) {
-      item.style.width = '100%';
-      item.style.maxWidth = '100%';
-      item.style.flex = '0 0 100%';
-      item.style.display = index === 0 ? 'block' : 'none';
+    allItems.forEach(function (item) {
+      item.style.setProperty('width', '100%', 'important');
+      item.style.setProperty('max-width', '100%', 'important');
+      item.style.setProperty('flex', '0 0 100%', 'important');
     });
 
-    function showSlide(index) {
-      current = (index + items.length) % items.length;
-      items.forEach(function (item, i) {
-        item.style.display = i === current ? 'block' : 'none';
-      });
+    manualModeReady = true;
+    showSlide(currentIndex);
+    return true;
+  }
+
+  function showSlide(index) {
+    if (!manualModeReady) {
+      uniqueSlides = getUniqueSlides();
+      if (uniqueSlides.length < 2) return;
     }
 
-    const previous = carousel.querySelector('.slider-navigation-previous');
-    const next = carousel.querySelector('.slider-navigation-next');
+    currentIndex = (index + uniqueSlides.length) % uniqueSlides.length;
 
-    if (previous) {
-      previous.addEventListener('click', function (event) {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        showSlide(current - 1);
-      }, true);
-    }
+    const selected = uniqueSlides[currentIndex];
+    const selectedImg = selected.querySelector('img');
+    const selectedKey = selectedImg ? (selectedImg.getAttribute('src') || selectedImg.src) : null;
 
-    if (next) {
-      next.addEventListener('click', function (event) {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        showSlide(current + 1);
-      }, true);
-    }
-
-    // Keyboard support while pointer is over the carousel.
-    let active = false;
-    carousel.addEventListener('mouseenter', function () { active = true; });
-    carousel.addEventListener('mouseleave', function () { active = false; });
-    document.addEventListener('keydown', function (event) {
-      if (!active) return;
-      if (event.key === 'ArrowLeft') showSlide(current - 1);
-      if (event.key === 'ArrowRight') showSlide(current + 1);
+    Array.from(carousel.querySelectorAll('.item')).forEach(function (item) {
+      const img = item.querySelector('img');
+      const key = img ? (img.getAttribute('src') || img.src) : null;
+      const visible = selectedKey ? key === selectedKey : item === selected;
+      item.style.setProperty('display', visible ? 'block' : 'none', 'important');
     });
-  }, 250);
-});
+  }
+
+  document.addEventListener('click', function (event) {
+    const next = event.target.closest('.slider-navigation-next');
+    const previous = event.target.closest('.slider-navigation-previous');
+
+    if (!next && !previous) return;
+
+    // This page has one image carousel. Ignore navigation elements that are
+    // clearly attached to another carousel if one is added later.
+    const navCarousel = event.target.closest('.carousel');
+    if (navCarousel && navCarousel !== carousel && !navCarousel.contains(carousel)) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    if (!prepareManualMode()) return;
+
+    if (next) showSlide(currentIndex + 1);
+    if (previous) showSlide(currentIndex - 1);
+  }, true);
+
+  // Optional keyboard switching while the pointer is over the image carousel.
+  let pointerOverCarousel = false;
+  carousel.addEventListener('mouseenter', function () { pointerOverCarousel = true; });
+  carousel.addEventListener('mouseleave', function () { pointerOverCarousel = false; });
+
+  document.addEventListener('keydown', function (event) {
+    if (!pointerOverCarousel) return;
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    if (!prepareManualMode()) return;
+
+    event.preventDefault();
+    showSlide(currentIndex + (event.key === 'ArrowRight' ? 1 : -1));
+  });
+})();
 </script>
 
 </body>
