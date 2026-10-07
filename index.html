@@ -593,6 +593,17 @@
 
 
 <style>
+  .image-carousel-section .container {
+    max-width: 1750px;
+  }
+
+  .image-carousel-section .results-carousel img {
+    width: 100%;
+    height: auto;
+    max-height: 900px;
+    object-fit: contain;
+  }
+
   .contour-legend-card {
     width: 100%;
     text-align: center;
@@ -601,7 +612,7 @@
   .contour-legend-image {
     display: block;
     width: 100%;
-    max-width: 320px;
+    max-width: 440px;
     height: auto;
     margin: 0 auto;
     object-fit: contain;
@@ -613,7 +624,7 @@
     }
 
     .contour-legend-image {
-      max-width: 280px;
+      max-width: 360px;
     }
   }
 </style>
@@ -802,7 +813,7 @@
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
-      <div class="column is-four-fifths">
+      <div class="column is-three-quarters">
 
         <div class="has-text-centered">
           <h2 class="title is-3">Project Structure</h2>
@@ -871,12 +882,12 @@
 <!-- End Project Structure -->
 
 <!-- Image carousel -->
-<section class="hero is-small">
+<section class="hero is-small image-carousel-section">
   <div class="hero-body">
     <div class="container">
-      <div class="columns is-variable is-5 is-vcentered">
+      <div class="columns is-variable is-4 is-vcentered">
 
-        <div class="column is-three-quarters">
+        <div class="column is-four-fifths">
           <div id="results-carousel" class="carousel results-carousel">
             <div class="item">
               <img src="static/images/NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096.png" alt="First research result visualization" loading="lazy"/>
