@@ -686,6 +686,81 @@
   }
 </style>
 
+
+<style>
+  /* XL carousel + legend: enlarge the actual images, not Bulma carousel mechanics */
+  .image-carousel-section .container {
+    width: min(98vw, 2100px) !important;
+    max-width: none !important;
+  }
+
+  .image-carousel-layout {
+    grid-template-columns: minmax(0, 4fr) minmax(420px, 1.35fr) !important;
+    gap: 40px !important;
+    align-items: stretch !important;
+  }
+
+  .image-carousel-main,
+  .image-carousel-legend,
+  #results-carousel,
+  #results-carousel .slider-container {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  /* Force the mammogram to fill the available slide width.
+     We do NOT touch .slider transform or .item width, so switching keeps working. */
+  .image-carousel-section #results-carousel .item img {
+    width: 100% !important;
+    max-width: none !important;
+    height: 860px !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+  }
+
+  .image-carousel-legend {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .contour-legend-card {
+    width: 100% !important;
+  }
+
+  .contour-legend-image {
+    width: 100% !important;
+    max-width: none !important;
+    height: 860px !important;
+    max-height: none !important;
+    object-fit: contain !important;
+  }
+
+  @media (max-width: 1200px) {
+    .image-carousel-layout {
+      grid-template-columns: minmax(0, 3fr) minmax(320px, 1.2fr) !important;
+      gap: 28px !important;
+    }
+
+    .image-carousel-section #results-carousel .item img,
+    .contour-legend-image {
+      height: 700px !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .image-carousel-layout {
+      grid-template-columns: 1fr !important;
+    }
+
+    .image-carousel-section #results-carousel .item img,
+    .contour-legend-image {
+      width: 100% !important;
+      height: auto !important;
+      max-height: 82vh !important;
+    }
+  }
+</style>
 </head>
 <body>
 
