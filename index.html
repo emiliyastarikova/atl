@@ -593,20 +593,22 @@
 
 
 <style>
-  /* Large carousel + large static contour legend */
+  /* Large carousel + static contour legend.
+     Important: do not override Bulma carousel internal .slider/.item widths,
+     because the library calculates those values for slide switching. */
   .image-carousel-section .hero-body {
     padding-left: 1rem;
     padding-right: 1rem;
   }
 
   .image-carousel-section .container {
-    width: 96vw !important;
-    max-width: 1900px !important;
+    width: 96vw;
+    max-width: 1900px;
   }
 
   .image-carousel-layout {
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(360px, 1fr);
+    grid-template-columns: minmax(0, 3fr) minmax(320px, 1fr);
     gap: 36px;
     align-items: center;
     width: 100%;
@@ -617,67 +619,59 @@
     min-width: 0;
   }
 
-  .image-carousel-section .results-carousel,
-  .image-carousel-section .carousel,
-  .image-carousel-section .slider,
-  .image-carousel-section .slider-container {
-    width: 100% !important;
-    max-width: none !important;
-  }
-
+  /* Only size the content inside a slide; leave carousel mechanics untouched. */
   .image-carousel-section .results-carousel .item {
-    width: 100% !important;
-    max-width: none !important;
     text-align: center;
   }
 
   .image-carousel-section .results-carousel .item img {
     display: block;
-    width: 100% !important;
-    height: 820px !important;
-    max-width: none !important;
-    max-height: none !important;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 820px;
     object-fit: contain;
     margin: 0 auto;
   }
 
   .image-carousel-section .results-carousel .subtitle {
     margin-top: 1rem;
+    overflow-wrap: anywhere;
   }
 
   .contour-legend-card {
-    width: 100% !important;
-    max-width: none !important;
+    width: 100%;
     text-align: center;
   }
 
   .contour-legend-image {
     display: block;
-    width: 100% !important;
-    max-width: none !important;
-    height: 720px !important;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 720px;
     object-fit: contain;
     margin: 0 auto;
   }
 
   @media (max-width: 1100px) {
     .image-carousel-layout {
-      grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+      grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
       gap: 24px;
     }
 
     .image-carousel-section .results-carousel .item img {
-      height: 650px !important;
+      max-height: 650px;
     }
 
     .contour-legend-image {
-      height: 560px !important;
+      max-height: 560px;
     }
   }
 
   @media (max-width: 768px) {
     .image-carousel-section .container {
-      width: 100% !important;
+      width: 100%;
     }
 
     .image-carousel-layout {
@@ -687,9 +681,7 @@
 
     .image-carousel-section .results-carousel .item img,
     .contour-legend-image {
-      width: 100% !important;
-      height: auto !important;
-      max-height: 75vh !important;
+      max-height: 75vh;
     }
   }
 </style>
