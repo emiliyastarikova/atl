@@ -1010,6 +1010,72 @@
 </section>
 <!-- End image carousel -->
 
+<!-- JSON viewer -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+
+      <div class="bibtex-header">
+        <h2 class="title">Annotation JSON sample</h2>
+
+        <button
+          class="copy-bibtex-btn"
+          onclick="copyAnnotationJSON()"
+          title="Copy JSON to clipboard"
+        >
+          <i class="fas fa-copy"></i>
+          <span id="copy-json-text">Copy</span>
+        </button>
+      </div>
+
+      <pre
+        id="json-viewer"
+        style="
+          height: 550px;
+          overflow: auto;
+          background: #ffffff;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 20px;
+          text-align: left;
+          font-size: 14px;
+        "
+      ></pre>
+
+    </div>
+  </div>
+</section>
+
+<script>
+fetch("static/pdfs/MammoAtlas_sample.json")
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById("json-viewer").textContent =
+      JSON.stringify(data, null, 2);
+  });
+
+
+function copyAnnotationJSON() {
+  const jsonText =
+    document.getElementById("json-viewer").textContent;
+
+  navigator.clipboard.writeText(jsonText)
+    .then(() => {
+
+      const copyText =
+        document.getElementById("copy-json-text");
+
+      copyText.textContent = "Copied!";
+
+      setTimeout(() => {
+        copyText.textContent = "Copy";
+      }, 1500);
+    });
+}
+</script>
+<!-- End JSON viewer -->
+
+
 <!-- Dataset histogram -->
 <section class="section">
   <div class="container is-max-desktop">
@@ -1375,73 +1441,6 @@
 
 
 
-<!-- JSON viewer -->
-<section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container">
-
-      <!-- <div class="bibtex-header">
-        <h2 class="title">Annotation JSON sample</h2>-->
-      <div class="has-text-centered">
-        <h2 class="title is-3">Annotation JSON sample</h2>
-      </div>
-
-        <button
-          class="copy-bibtex-btn"
-          onclick="copyAnnotationJSON()"
-          title="Copy JSON to clipboard"
-        >
-          <i class="fas fa-copy"></i>
-          <span id="copy-json-text">Copy</span>
-        </button>
-      </div>
-
-      <pre
-        id="json-viewer"
-        style="
-          height: 550px;
-          overflow: auto;
-          background: #ffffff;
-          border: 1px solid #ddd;
-          border-radius: 8px;
-          padding: 20px;
-          text-align: left;
-          font-size: 14px;
-        "
-      ></pre>
-
-    </div>
-  </div>
-</section>
-
-<script>
-fetch("static/pdfs/MammoAtlas_sample.json")
-  .then(response => response.json())
-  .then(data => {
-    document.getElementById("json-viewer").textContent =
-      JSON.stringify(data, null, 2);
-  });
-
-
-function copyAnnotationJSON() {
-  const jsonText =
-    document.getElementById("json-viewer").textContent;
-
-  navigator.clipboard.writeText(jsonText)
-    .then(() => {
-
-      const copyText =
-        document.getElementById("copy-json-text");
-
-      copyText.textContent = "Copied!";
-
-      setTimeout(() => {
-        copyText.textContent = "Copy";
-      }, 1500);
-    });
-}
-</script>
-<!-- End JSON viewer -->
 
 <!-- Paper poster -->
 <section class="hero is-small is-light">
