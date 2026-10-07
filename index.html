@@ -597,14 +597,24 @@
 
 
 <style>
-  /* =====================================================
-     PROJECT STRUCTURE
-     ===================================================== */
-  .project-structure-card {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: left;
-  }
+/* =====================================================
+   PROJECT STRUCTURE
+   ===================================================== */
+
+.project-structure-card {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.4fr);
+  gap: 40px;
+
+  align-items: start;
+  text-align: left;
+}
+
+
+/* LEFT: structure tree */
 
 .project-structure-tree {
   border: 1px solid #e6e6e6;
@@ -617,51 +627,62 @@
   border: none;
   box-shadow: none;
   background: #ffffff;
-  padding: 20px;
+  padding: 24px;
 }
 
-  .project-structure-tree code {
-    background: transparent;
-    color: inherit;
+.project-structure-tree code {
+  background: transparent;
+  color: inherit;
+}
+
+
+/* RIGHT: descriptions */
+
+.project-structure-description {
+  margin-top: 0;
+}
+
+.project-structure-item {
+  padding: 0 0 18px 0;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.project-structure-item:first-child {
+  padding-top: 0;
+}
+
+.project-structure-item:last-child {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
+.project-structure-item strong {
+  color: #363636;
+}
+
+.project-structure-item p {
+  margin: 0;
+  color: #4a4a4a;
+  line-height: 1.6;
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+  .project-structure-card {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 
-  .project-structure-description {
-    margin-top: 1.5rem;
+  .project-structure-tree pre {
+    font-size: 0.82rem;
+    padding: 20px;
   }
-
-  .project-structure-item {
-    padding: 0.9rem 0;
-    border-bottom: 1px solid #eeeeee;
-  }
-
-  .project-structure-item:first-child {
-    padding-top: 0;
-  }
-
-  .project-structure-item:last-child {
-    padding-bottom: 0;
-    border-bottom: 0;
-  }
-
-  .project-structure-item strong {
-    color: #363636;
-  }
-
-  .project-structure-item p {
-    margin: 0;
-    color: #4a4a4a;
-    line-height: 1.6;
-  }
-
-  @media (max-width: 768px) {
-    .project-structure-tree {
-      padding: 1.1rem 1.25rem;
-    }
-
-    .project-structure-tree pre {
-      font-size: 0.82rem;
-    }
-  }
+}
 </style>
 
 </head>
