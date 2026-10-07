@@ -593,38 +593,103 @@
 
 
 <style>
-  .image-carousel-section .container {
-    max-width: 1750px;
+  /* Large carousel + large static contour legend */
+  .image-carousel-section .hero-body {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
-  .image-carousel-section .results-carousel img {
+  .image-carousel-section .container {
+    width: 96vw !important;
+    max-width: 1900px !important;
+  }
+
+  .image-carousel-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(360px, 1fr);
+    gap: 36px;
+    align-items: center;
     width: 100%;
-    height: auto;
-    max-height: 900px;
+  }
+
+  .image-carousel-main,
+  .image-carousel-legend {
+    min-width: 0;
+  }
+
+  .image-carousel-section .results-carousel,
+  .image-carousel-section .carousel,
+  .image-carousel-section .slider,
+  .image-carousel-section .slider-container {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .image-carousel-section .results-carousel .item {
+    width: 100% !important;
+    max-width: none !important;
+    text-align: center;
+  }
+
+  .image-carousel-section .results-carousel .item img {
+    display: block;
+    width: 100% !important;
+    height: 820px !important;
+    max-width: none !important;
+    max-height: none !important;
     object-fit: contain;
+    margin: 0 auto;
+  }
+
+  .image-carousel-section .results-carousel .subtitle {
+    margin-top: 1rem;
   }
 
   .contour-legend-card {
-    width: 100%;
+    width: 100% !important;
+    max-width: none !important;
     text-align: center;
   }
 
   .contour-legend-image {
     display: block;
-    width: 100%;
-    max-width: 440px;
-    height: auto;
-    margin: 0 auto;
+    width: 100% !important;
+    max-width: none !important;
+    height: 720px !important;
     object-fit: contain;
+    margin: 0 auto;
   }
 
-  @media (max-width: 768px) {
-    .contour-legend-card {
-      margin-top: 1.5rem;
+  @media (max-width: 1100px) {
+    .image-carousel-layout {
+      grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+      gap: 24px;
+    }
+
+    .image-carousel-section .results-carousel .item img {
+      height: 650px !important;
     }
 
     .contour-legend-image {
-      max-width: 360px;
+      height: 560px !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .image-carousel-section .container {
+      width: 100% !important;
+    }
+
+    .image-carousel-layout {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .image-carousel-section .results-carousel .item img,
+    .contour-legend-image {
+      width: 100% !important;
+      height: auto !important;
+      max-height: 75vh !important;
     }
   }
 </style>
@@ -885,9 +950,9 @@
 <section class="hero is-small image-carousel-section">
   <div class="hero-body">
     <div class="container">
-      <div class="columns is-variable is-4 is-vcentered">
+      <div class="image-carousel-layout">
 
-        <div class="column is-four-fifths">
+        <div class="image-carousel-main">
           <div id="results-carousel" class="carousel results-carousel">
             <div class="item">
               <img src="static/images/NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096.png" alt="First research result visualization" loading="lazy"/>
@@ -904,8 +969,9 @@
           </div>
         </div>
 
-        <div class="column is-one-quarter">
+        <div class="image-carousel-legend">
           <div class="contour-legend-card">
+            <h3 class="title is-5 has-text-centered">Contour legend</h3>
             <img src="static/images/contour_legend.png" alt="Legend for mammography annotation contour colors" class="contour-legend-image" loading="lazy"/>
           </div>
         </div>
