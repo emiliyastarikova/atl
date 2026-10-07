@@ -591,176 +591,6 @@
   }
 </style>
 
-
-<style>
-  /* Large carousel + static contour legend.
-     Important: do not override Bulma carousel internal .slider/.item widths,
-     because the library calculates those values for slide switching. */
-  .image-carousel-section .hero-body {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .image-carousel-section .container {
-    width: 96vw;
-    max-width: 1900px;
-  }
-
-  .image-carousel-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(320px, 1fr);
-    gap: 36px;
-    align-items: center;
-    width: 100%;
-  }
-
-  .image-carousel-main,
-  .image-carousel-legend {
-    min-width: 0;
-  }
-
-  /* Only size the content inside a slide; leave carousel mechanics untouched. */
-  .image-carousel-section .results-carousel .item {
-    text-align: center;
-  }
-
-  .image-carousel-section .results-carousel .item img {
-    display: block;
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: 820px;
-    object-fit: contain;
-    margin: 0 auto;
-  }
-
-  .image-carousel-section .results-carousel .subtitle {
-    margin-top: 1rem;
-    overflow-wrap: anywhere;
-  }
-
-  .contour-legend-card {
-    width: 100%;
-    text-align: center;
-  }
-
-  .contour-legend-image {
-    display: block;
-    width: auto;
-    max-width: 100%;
-    height: auto;
-    max-height: 720px;
-    object-fit: contain;
-    margin: 0 auto;
-  }
-
-  @media (max-width: 1100px) {
-    .image-carousel-layout {
-      grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
-      gap: 24px;
-    }
-
-    .image-carousel-section .results-carousel .item img {
-      max-height: 650px;
-    }
-
-    .contour-legend-image {
-      max-height: 560px;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .image-carousel-section .container {
-      width: 100%;
-    }
-
-    .image-carousel-layout {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-
-    .image-carousel-section .results-carousel .item img,
-    .contour-legend-image {
-      max-height: 75vh;
-    }
-  }
-</style>
-
-
-<style>
-  /* XL carousel + legend: enlarge the actual images, not Bulma carousel mechanics */
-  .image-carousel-section .container {
-    width: min(98vw, 2100px) !important;
-    max-width: none !important;
-  }
-
-  .image-carousel-layout {
-    grid-template-columns: minmax(0, 4fr) minmax(420px, 1.35fr) !important;
-    gap: 40px !important;
-    align-items: stretch !important;
-  }
-
-  .image-carousel-main,
-  .image-carousel-legend,
-  #results-carousel,
-  #results-carousel .slider-container {
-    width: 100% !important;
-    max-width: none !important;
-  }
-
-  /* Force the mammogram to fill the available slide width.
-     We do NOT touch .slider transform or .item width, so switching keeps working. */
-  .image-carousel-section #results-carousel .item img {
-    width: 100% !important;
-    max-width: none !important;
-    height: 860px !important;
-    max-height: none !important;
-    object-fit: contain !important;
-    margin: 0 auto !important;
-  }
-
-  .image-carousel-legend {
-    display: flex !important;
-    align-items: center !important;
-  }
-
-  .contour-legend-card {
-    width: 100% !important;
-  }
-
-  .contour-legend-image {
-    width: 100% !important;
-    max-width: none !important;
-    height: 860px !important;
-    max-height: none !important;
-    object-fit: contain !important;
-  }
-
-  @media (max-width: 1200px) {
-    .image-carousel-layout {
-      grid-template-columns: minmax(0, 3fr) minmax(320px, 1.2fr) !important;
-      gap: 28px !important;
-    }
-
-    .image-carousel-section #results-carousel .item img,
-    .contour-legend-image {
-      height: 700px !important;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .image-carousel-layout {
-      grid-template-columns: 1fr !important;
-    }
-
-    .image-carousel-section #results-carousel .item img,
-    .contour-legend-image {
-      width: 100% !important;
-      height: auto !important;
-      max-height: 82vh !important;
-    }
-  }
-</style>
 </head>
 <body>
 
@@ -945,7 +775,7 @@
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
-      <div class="column is-three-quarters">
+      <div class="column is-four-fifths">
 
         <div class="has-text-centered">
           <h2 class="title is-3">Project Structure</h2>
@@ -1014,38 +844,42 @@
 <!-- End Project Structure -->
 
 <!-- Image carousel -->
-<section class="hero is-small image-carousel-section">
+<section class="hero is-small">
   <div class="hero-body">
     <div class="container">
-      <div class="image-carousel-layout">
-
-        <div class="image-carousel-main">
-          <div id="results-carousel" class="carousel results-carousel">
-            <div class="item">
-              <img src="static/images/NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096.png" alt="First research result visualization" loading="lazy"/>
-              <h2 class="subtitle has-text-centered">NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096</h2>
-            </div>
-            <div class="item">
-              <img src="static/images/CSAW-CC_1.2.826.0.1.3680043.8.498.13362221286484217654615033329863402144.png" alt="Second research result visualization" loading="lazy"/>
-              <h2 class="subtitle has-text-centered">CSAW-CC_1.2.826.0.1.3680043.8.498.13362221286484217654615033329863402144</h2>
-            </div>
-            <div class="item">
-              <img src="static/images/CMMD_1.3.6.1.4.1.14519.5.2.1.1239.1759.598888059044635576254843278173.png" alt="Fourth research result visualization" loading="lazy"/>
-              <h2 class="subtitle has-text-centered">CMMD_1.3.6.1.4.1.14519.5.2.1.1239.1759.598888059044635576254843278173</h2>
-            </div>
-          </div>
-        </div>
-
-        <div class="image-carousel-legend">
-          <div class="contour-legend-card">
-            <h3 class="title is-5 has-text-centered">Contour legend</h3>
-            <img src="static/images/contour_legend.png" alt="Legend for mammography annotation contour colors" class="contour-legend-image" loading="lazy"/>
-          </div>
-        </div>
-
+      <div id="results-carousel" class="carousel results-carousel">
+       <div class="item">
+        <!-- TODO: Replace with your research result images -->
+        <img src="static/images/NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096.png" alt="First research result visualization" loading="lazy"/>
+        <!-- TODO: Replace with description of this result -->
+        <h2 class="subtitle has-text-centered">
+          NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096
+        </h2>
       </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/CSAW-CC_1.2.826.0.1.3680043.8.498.13362221286484217654615033329863402144.png" alt="Second research result visualization" loading="lazy"/>
+        <h2 class="subtitle has-text-centered">
+          CSAW-CC_1.2.826.0.1.3680043.8.498.13362221286484217654615033329863402144
+        </h2>
+      </div>
+       <!--<div class="item">
+        <!-- Your image here 
+        <img src="static/images/INbreast_1.2.826.0.1.3680043.8.498.29713840010218141690658381592169073407.png" alt="Third research result visualization" loading="lazy"/>
+        <h2 class="subtitle has-text-centered">
+         INbreast_1.2.826.0.1.3680043.8.498.29713840010218141690658381592169073407
+       </h2>
+     </div> -->
+     <div class="item">
+      <!-- Your image here -->
+      <img src="static/images/CMMD_1.3.6.1.4.1.14519.5.2.1.1239.1759.598888059044635576254843278173.png" alt="Fourth research result visualization" loading="lazy"/>
+      <h2 class="subtitle has-text-centered">
+        CMMD_1.3.6.1.4.1.14519.5.2.1.1239.1759.598888059044635576254843278173
+      </h2>
     </div>
   </div>
+</div>
+</div>
 </section>
 <!-- End image carousel -->
 
@@ -2939,121 +2773,6 @@ if (datasetsCanvas) {
 </script>
 
 
-
-
-<script>
-/* Keep the current Bulma-carousel appearance exactly as it is.
-   Only replace slide switching with a robust delegated handler.
-   Bulma may move its navigation buttons outside #results-carousel,
-   so button clicks are captured at document level. */
-(function () {
-  const carousel = document.getElementById('results-carousel');
-  if (!carousel) return;
-
-  let currentIndex = 0;
-  let manualModeReady = false;
-  let uniqueSlides = [];
-
-  function getUniqueSlides() {
-    const allItems = Array.from(carousel.querySelectorAll('.item'));
-    const seen = new Set();
-    const result = [];
-
-    allItems.forEach(function (item) {
-      const img = item.querySelector('img');
-      const key = img ? (img.getAttribute('src') || img.src) : item.textContent.trim();
-      if (!seen.has(key)) {
-        seen.add(key);
-        result.push(item);
-      }
-    });
-
-    return result;
-  }
-
-  function prepareManualMode() {
-    if (manualModeReady) return true;
-
-    uniqueSlides = getUniqueSlides();
-    if (uniqueSlides.length < 2) return false;
-
-    const allItems = Array.from(carousel.querySelectorAll('.item'));
-    const slider = carousel.querySelector('.slider');
-
-    if (slider) {
-      slider.style.setProperty('transform', 'none', 'important');
-      slider.style.setProperty('transition', 'none', 'important');
-      slider.style.setProperty('width', '100%', 'important');
-      slider.style.setProperty('display', 'block', 'important');
-    }
-
-    allItems.forEach(function (item) {
-      item.style.setProperty('width', '100%', 'important');
-      item.style.setProperty('max-width', '100%', 'important');
-      item.style.setProperty('flex', '0 0 100%', 'important');
-    });
-
-    manualModeReady = true;
-    showSlide(currentIndex);
-    return true;
-  }
-
-  function showSlide(index) {
-    if (!manualModeReady) {
-      uniqueSlides = getUniqueSlides();
-      if (uniqueSlides.length < 2) return;
-    }
-
-    currentIndex = (index + uniqueSlides.length) % uniqueSlides.length;
-
-    const selected = uniqueSlides[currentIndex];
-    const selectedImg = selected.querySelector('img');
-    const selectedKey = selectedImg ? (selectedImg.getAttribute('src') || selectedImg.src) : null;
-
-    Array.from(carousel.querySelectorAll('.item')).forEach(function (item) {
-      const img = item.querySelector('img');
-      const key = img ? (img.getAttribute('src') || img.src) : null;
-      const visible = selectedKey ? key === selectedKey : item === selected;
-      item.style.setProperty('display', visible ? 'block' : 'none', 'important');
-    });
-  }
-
-  document.addEventListener('click', function (event) {
-    const next = event.target.closest('.slider-navigation-next');
-    const previous = event.target.closest('.slider-navigation-previous');
-
-    if (!next && !previous) return;
-
-    // This page has one image carousel. Ignore navigation elements that are
-    // clearly attached to another carousel if one is added later.
-    const navCarousel = event.target.closest('.carousel');
-    if (navCarousel && navCarousel !== carousel && !navCarousel.contains(carousel)) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-
-    if (!prepareManualMode()) return;
-
-    if (next) showSlide(currentIndex + 1);
-    if (previous) showSlide(currentIndex - 1);
-  }, true);
-
-  // Optional keyboard switching while the pointer is over the image carousel.
-  let pointerOverCarousel = false;
-  carousel.addEventListener('mouseenter', function () { pointerOverCarousel = true; });
-  carousel.addEventListener('mouseleave', function () { pointerOverCarousel = false; });
-
-  document.addEventListener('keydown', function (event) {
-    if (!pointerOverCarousel) return;
-    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-    if (!prepareManualMode()) return;
-
-    event.preventDefault();
-    showSlide(currentIndex + (event.key === 'ArrowRight' ? 1 : -1));
-  });
-})();
-</script>
 
 </body>
 </html>
