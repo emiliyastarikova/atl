@@ -591,6 +591,33 @@
   }
 </style>
 
+
+<style>
+  .contour-legend-card {
+    width: 100%;
+    text-align: center;
+  }
+
+  .contour-legend-image {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    margin: 0 auto;
+    object-fit: contain;
+  }
+
+  @media (max-width: 768px) {
+    .contour-legend-card {
+      margin-top: 1.5rem;
+    }
+
+    .contour-legend-image {
+      max-width: 280px;
+    }
+  }
+</style>
+
 </head>
 <body>
 
@@ -847,39 +874,35 @@
 <section class="hero is-small">
   <div class="hero-body">
     <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-       <div class="item">
-        <!-- TODO: Replace with your research result images -->
-        <img src="static/images/NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096.png" alt="First research result visualization" loading="lazy"/>
-        <!-- TODO: Replace with description of this result -->
-        <h2 class="subtitle has-text-centered">
-          NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096
-        </h2>
+      <div class="columns is-variable is-5 is-vcentered">
+
+        <div class="column is-three-quarters">
+          <div id="results-carousel" class="carousel results-carousel">
+            <div class="item">
+              <img src="static/images/NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096.png" alt="First research result visualization" loading="lazy"/>
+              <h2 class="subtitle has-text-centered">NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096</h2>
+            </div>
+            <div class="item">
+              <img src="static/images/CSAW-CC_1.2.826.0.1.3680043.8.498.13362221286484217654615033329863402144.png" alt="Second research result visualization" loading="lazy"/>
+              <h2 class="subtitle has-text-centered">CSAW-CC_1.2.826.0.1.3680043.8.498.13362221286484217654615033329863402144</h2>
+            </div>
+            <div class="item">
+              <img src="static/images/CMMD_1.3.6.1.4.1.14519.5.2.1.1239.1759.598888059044635576254843278173.png" alt="Fourth research result visualization" loading="lazy"/>
+              <h2 class="subtitle has-text-centered">CMMD_1.3.6.1.4.1.14519.5.2.1.1239.1759.598888059044635576254843278173</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-one-quarter">
+          <div class="contour-legend-card">
+            <h3 class="title is-5 has-text-centered">Contour legend</h3>
+            <img src="static/images/contour_legend.png" alt="Legend for mammography annotation contour colors" class="contour-legend-image" loading="lazy"/>
+          </div>
+        </div>
+
       </div>
-      <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/CSAW-CC_1.2.826.0.1.3680043.8.498.13362221286484217654615033329863402144.png" alt="Second research result visualization" loading="lazy"/>
-        <h2 class="subtitle has-text-centered">
-          CSAW-CC_1.2.826.0.1.3680043.8.498.13362221286484217654615033329863402144
-        </h2>
-      </div>
-       <!--<div class="item">
-        <!-- Your image here 
-        <img src="static/images/INbreast_1.2.826.0.1.3680043.8.498.29713840010218141690658381592169073407.png" alt="Third research result visualization" loading="lazy"/>
-        <h2 class="subtitle has-text-centered">
-         INbreast_1.2.826.0.1.3680043.8.498.29713840010218141690658381592169073407
-       </h2>
-     </div> -->
-     <div class="item">
-      <!-- Your image here -->
-      <img src="static/images/CMMD_1.3.6.1.4.1.14519.5.2.1.1239.1759.598888059044635576254843278173.png" alt="Fourth research result visualization" loading="lazy"/>
-      <h2 class="subtitle has-text-centered">
-        CMMD_1.3.6.1.4.1.14519.5.2.1.1239.1759.598888059044635576254843278173
-      </h2>
     </div>
   </div>
-</div>
-</div>
 </section>
 <!-- End image carousel -->
 
