@@ -597,6 +597,20 @@
 
 
 <style>
+  /* Annotation JSON width aligned with Annotation Examples */
+  .annotation-json-container {
+    width: 96%;
+    max-width: 2300px;
+    margin: 0 auto;
+  }
+
+  #json-viewer {
+    width: 100%;
+    box-sizing: border-box;
+  }
+</style>
+
+<style>
 /* =====================================================
    PROJECT STRUCTURE
    ===================================================== */
@@ -1013,7 +1027,7 @@
 <!-- JSON viewer -->
 <section class="hero is-small is-light">
   <div class="hero-body">
-    <div class="container">
+    <div class="annotation-json-container">
 
       <div class="bibtex-header">
         <h2 class="title">Annotation JSON sample</h2>
@@ -1031,6 +1045,7 @@
       <pre
         id="json-viewer"
         style="
+          width: 100%;
           height: 550px;
           overflow: auto;
           background: #ffffff;
