@@ -761,6 +761,94 @@
     }
   }
 </style>
+
+<style>
+  /* Independent MammoAtlas carousel: avoids conflicts with bulma-carousel. */
+  .mammo-carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .mammo-carousel-slide {
+    display: none;
+    width: 100%;
+    text-align: center;
+  }
+
+  .mammo-carousel-slide.is-active {
+    display: block;
+  }
+
+  .mammo-carousel-slide img {
+    display: block;
+    width: 100% !important;
+    max-width: none !important;
+    height: 860px !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+  }
+
+  .mammo-carousel-slide .subtitle {
+    margin-top: 1rem;
+    overflow-wrap: anywhere;
+  }
+
+  .mammo-carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255,255,255,.9);
+    box-shadow: 0 3px 12px rgba(0,0,0,.2);
+    color: #333;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .mammo-carousel-button:hover { background: #fff; }
+  .mammo-carousel-prev { left: 14px; }
+  .mammo-carousel-next { right: 14px; }
+
+  .mammo-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .mammo-carousel-dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #c8c8c8;
+    cursor: pointer;
+  }
+
+  .mammo-carousel-dot.is-active { background: #d6106e; }
+
+  @media (max-width: 1200px) {
+    .mammo-carousel-slide img { height: 700px !important; }
+  }
+
+  @media (max-width: 768px) {
+    .mammo-carousel-slide img {
+      width: 100% !important;
+      height: auto !important;
+      max-height: 82vh !important;
+    }
+    .mammo-carousel-button { width: 42px; height: 42px; font-size: 24px; }
+  }
+</style>
+
 </head>
 <body>
 
@@ -1020,20 +1108,24 @@
       <div class="image-carousel-layout">
 
         <div class="image-carousel-main">
-          <div id="results-carousel" class="carousel results-carousel">
-            <div class="item">
+          <div id="mammo-carousel" class="mammo-carousel" aria-label="Mammography image carousel">
+            <div class="mammo-carousel-slide is-active">
               <img src="static/images/NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096.png" alt="First research result visualization" loading="lazy"/>
               <h2 class="subtitle has-text-centered">NLBS_1.2.124.113532.10.77.16.11.20090723.131928.13494096</h2>
             </div>
-            <div class="item">
+            <div class="mammo-carousel-slide">
               <img src="static/images/CSAW-CC_1.2.826.0.1.3680043.8.498.13362221286484217654615033329863402144.png" alt="Second research result visualization" loading="lazy"/>
               <h2 class="subtitle has-text-centered">CSAW-CC_1.2.826.0.1.3680043.8.498.13362221286484217654615033329863402144</h2>
             </div>
-            <div class="item">
-              <img src="static/images/CMMD_1.3.6.1.4.1.14519.5.2.1.1239.1759.598888059044635576254843278173.png" alt="Fourth research result visualization" loading="lazy"/>
+            <div class="mammo-carousel-slide">
+              <img src="static/images/CMMD_1.3.6.1.4.1.14519.5.2.1.1239.1759.598888059044635576254843278173.png" alt="Third research result visualization" loading="lazy"/>
               <h2 class="subtitle has-text-centered">CMMD_1.3.6.1.4.1.14519.5.2.1.1239.1759.598888059044635576254843278173</h2>
             </div>
+
+            <button class="mammo-carousel-button mammo-carousel-prev" type="button" aria-label="Previous image">&#10094;</button>
+            <button class="mammo-carousel-button mammo-carousel-next" type="button" aria-label="Next image">&#10095;</button>
           </div>
+          <div class="mammo-carousel-dots" aria-label="Carousel navigation"></div>
         </div>
 
         <div class="image-carousel-legend">
@@ -2939,6 +3031,50 @@ if (datasetsCanvas) {
 </script>
 
 
+
+
+<script>
+(function () {
+  const carousel = document.getElementById('mammo-carousel');
+  if (!carousel) return;
+
+  const slides = Array.from(carousel.querySelectorAll('.mammo-carousel-slide'));
+  const prev = carousel.querySelector('.mammo-carousel-prev');
+  const next = carousel.querySelector('.mammo-carousel-next');
+  const dotsContainer = document.querySelector('.mammo-carousel-dots');
+  let index = 0;
+
+  const dots = slides.map((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'mammo-carousel-dot' + (i === 0 ? ' is-active' : '');
+    dot.setAttribute('aria-label', `Show image ${i + 1}`);
+    dot.addEventListener('click', () => show(i));
+    dotsContainer.appendChild(dot);
+    return dot;
+  });
+
+  function show(newIndex) {
+    index = (newIndex + slides.length) % slides.length;
+    slides.forEach((slide, i) => slide.classList.toggle('is-active', i === index));
+    dots.forEach((dot, i) => dot.classList.toggle('is-active', i === index));
+  }
+
+  prev.addEventListener('click', () => show(index - 1));
+  next.addEventListener('click', () => show(index + 1));
+
+  let touchStartX = null;
+  carousel.addEventListener('touchstart', (event) => {
+    touchStartX = event.changedTouches[0].clientX;
+  }, { passive: true });
+  carousel.addEventListener('touchend', (event) => {
+    if (touchStartX === null) return;
+    const dx = event.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+    touchStartX = null;
+  }, { passive: true });
+})();
+</script>
 
 </body>
 </html>
