@@ -2940,5 +2940,75 @@ if (datasetsCanvas) {
 
 
 
+
+<script>
+/* Keep the existing Bulma-carousel look, but make slide switching independent
+   of Bulma's width calculations after the large-layout CSS is applied. */
+window.addEventListener('load', function () {
+  const carousel = document.getElementById('results-carousel');
+  if (!carousel) return;
+
+  // Wait until bulma-carousel has created its navigation and slider markup.
+  setTimeout(function () {
+    const items = Array.from(carousel.querySelectorAll('.item'));
+    if (items.length < 2) return;
+
+    let current = 0;
+
+    // Preserve Bulma's generated viewport/navigation, but use simple visibility
+    // switching so the enlarged layout cannot break horizontal transforms.
+    const slider = carousel.querySelector('.slider');
+    if (slider) {
+      slider.style.transform = 'none';
+      slider.style.width = '100%';
+      slider.style.display = 'block';
+    }
+
+    items.forEach(function (item, index) {
+      item.style.width = '100%';
+      item.style.maxWidth = '100%';
+      item.style.flex = '0 0 100%';
+      item.style.display = index === 0 ? 'block' : 'none';
+    });
+
+    function showSlide(index) {
+      current = (index + items.length) % items.length;
+      items.forEach(function (item, i) {
+        item.style.display = i === current ? 'block' : 'none';
+      });
+    }
+
+    const previous = carousel.querySelector('.slider-navigation-previous');
+    const next = carousel.querySelector('.slider-navigation-next');
+
+    if (previous) {
+      previous.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        showSlide(current - 1);
+      }, true);
+    }
+
+    if (next) {
+      next.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        showSlide(current + 1);
+      }, true);
+    }
+
+    // Keyboard support while pointer is over the carousel.
+    let active = false;
+    carousel.addEventListener('mouseenter', function () { active = true; });
+    carousel.addEventListener('mouseleave', function () { active = false; });
+    document.addEventListener('keydown', function (event) {
+      if (!active) return;
+      if (event.key === 'ArrowLeft') showSlide(current - 1);
+      if (event.key === 'ArrowRight') showSlide(current + 1);
+    });
+  }, 250);
+});
+</script>
+
 </body>
 </html>
