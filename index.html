@@ -601,13 +601,21 @@
    PROJECT STRUCTURE
    ===================================================== */
 
+.project-structure-container {
+  width: 100%;
+  max-width: none;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+
 .project-structure-card {
-  max-width: 1800px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
 
   display: grid;
-  grid-template-columns: 32% 68%;
-  gap: 40px;
+  grid-template-columns: 25% 75%;
+  gap: 35px;
 
   align-items: start;
   text-align: left;
@@ -639,10 +647,13 @@
 /* RIGHT: descriptions */
 
 .project-structure-description {
+  width: 100%;
+  max-width: none;
   margin-top: 0;
 }
 
 .project-structure-item {
+  width: 100%;
   padding: 0 0 18px 0;
   margin-bottom: 18px;
   border-bottom: 1px solid #eeeeee;
@@ -663,6 +674,8 @@
 }
 
 .project-structure-item p {
+  width: 100%;
+  max-width: none;
   margin: 0;
   color: #4a4a4a;
   line-height: 1.6;
@@ -672,6 +685,11 @@
 /* Mobile */
 
 @media (max-width: 768px) {
+
+  .project-structure-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 
   .project-structure-card {
     grid-template-columns: 1fr;
@@ -846,7 +864,7 @@
 
 <!-- Paper abstract -->
 <section class="section hero is-light">
-  <div class="container is-max-desktop">
+  <div <div class="container is-fluid project-structure-container">
     <div class="columns is-centered has-text-centered">
       <div class="column is-10">
         <h2 class="title is-3">Abstract</h2>
