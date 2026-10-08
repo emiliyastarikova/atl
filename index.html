@@ -732,8 +732,119 @@ Annotation Examples JSON sample
 }
 </style>
 
+
+<style id="mammoatlas-theme-styles">
+  :root { color-scheme: light; }
+  html[data-theme="dark"] { color-scheme: dark; }
+  .theme-toggle {
+    position: fixed; top: 18px; right: 18px; z-index: 10000;
+    display: flex; align-items: center; gap: 9px; padding: 10px 16px;
+    border: 1px solid #dedee5; border-radius: 999px;
+    background: #fff; color: #24242b; font: 600 14px Inter, sans-serif;
+    box-shadow: 0 4px 20px rgba(0,0,0,.12); cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s;
+  }
+  .theme-toggle:hover { border-color: #d6106e; }
+  .theme-toggle:focus-visible { outline: 3px solid #d6106e; outline-offset: 3px; }
+  html[data-theme="dark"] body,
+  html[data-theme="dark"] main,
+  html[data-theme="dark"] .section,
+  html[data-theme="dark"] .hero,
+  html[data-theme="dark"] .hero.is-light,
+  html[data-theme="dark"] .footer {
+    background-color: #111318 !important; color: #d7d9e2 !important;
+  }
+  html[data-theme="dark"] .hero.is-light,
+  html[data-theme="dark"] .annotation-examples-section,
+  html[data-theme="dark"] .annotation-json-section {
+    background-color: #1a1d25 !important;
+  }
+  html[data-theme="dark"] .title,
+  html[data-theme="dark"] .subtitle,
+  html[data-theme="dark"] .content,
+  html[data-theme="dark"] .content p,
+  html[data-theme="dark"] .label,
+  html[data-theme="dark"] strong,
+  html[data-theme="dark"] .has-text-grey,
+  html[data-theme="dark"] .project-structure-item strong,
+  html[data-theme="dark"] .project-structure-item p {
+    color: #e9eaf0 !important;
+  }
+  html[data-theme="dark"] a:not(.button) { color: #ff86bc; }
+  html[data-theme="dark"] a:not(.button):hover { color: #ffc0dc; }
+  html[data-theme="dark"] .theme-toggle {
+    background: #272b36; color: #f4f4f7; border-color: #424653;
+  }
+  html[data-theme="dark"] .project-structure-tree,
+  html[data-theme="dark"] .project-structure-item { border-color: #3a3e4b; }
+  html[data-theme="dark"] .project-structure-tree pre,
+  html[data-theme="dark"] .project-structure-tree code,
+  html[data-theme="dark"] #json-viewer,
+  html[data-theme="dark"] #bibtex-code,
+  html[data-theme="dark"] pre,
+  html[data-theme="dark"] pre code {
+    background: #20242e !important; color: #e4e5ec !important;
+    border-color: #424653 !important;
+  }
+  html[data-theme="dark"] .finding-attributes-table,
+  html[data-theme="dark"] .finding-attributes-table th,
+  html[data-theme="dark"] .finding-attributes-table td,
+  html[data-theme="dark"] .finding-attributes-table thead th,
+  html[data-theme="dark"] .finding-attributes-table tr:hover td {
+    background: #20242e !important; color: #e5e6ed !important;
+  }
+  html[data-theme="dark"] .dicom-toolbar,
+  html[data-theme="dark"] .dicom-legend {
+    background: #20242e; border-color: #404451; color: #e5e6ed;
+  }
+  html[data-theme="dark"] .dicom-legend-title,
+  html[data-theme="dark"] .dicom-legend-subtitle,
+  html[data-theme="dark"] .dicom-legend-id,
+  html[data-theme="dark"] .dicom-legend-hex { color: #afb2c0; }
+  html[data-theme="dark"] .dicom-legend-item {
+    background: #2a2e39; border-color: #454a57; color: #ececf1;
+  }
+  html[data-theme="dark"] .dicom-legend-item:hover { background: #363b48; }
+  html[data-theme="dark"] .dicom-legend-item.is-hidden-segment { background: #232630; }
+  html[data-theme="dark"] .dicom-toolbar-separator { background: #474b58; }
+  html[data-theme="dark"] .button:not(.is-active),
+  html[data-theme="dark"] .select select,
+  html[data-theme="dark"] select {
+    background-color: #303541; border-color: #515665; color: #f0f0f4;
+  }
+  html[data-theme="dark"] .button:not(.is-active):hover { background-color: #3c4250; }
+  html[data-theme="dark"] .button.is-active { background: #d6106e; color: #fff; border-color: #d6106e; }
+  html[data-theme="dark"] .more-works-dropdown,
+  html[data-theme="dark"] .work-item,
+  html[data-theme="dark"] .dropdown-header,
+  html[data-theme="dark"] .more-works-btn,
+  html[data-theme="dark"] .scroll-to-top,
+  html[data-theme="dark"] .copy-bibtex-btn {
+    background: #252a35 !important; color: #f0f0f5 !important; border-color: #484d59 !important;
+  }
+  html[data-theme="dark"] .work-info p,
+  html[data-theme="dark"] .work-info h5,
+  html[data-theme="dark"] .dropdown-header h4 { color: #e8e9ef !important; }
+  html[data-theme="dark"] .dicom-path-note { color: #afb2c0; }
+  @media (max-width: 600px) {
+    .theme-toggle { top: 10px; right: 10px; padding: 8px 11px; font-size: 12px; }
+  }
+</style>
+<script>
+  (function () {
+    const saved = localStorage.getItem('mammoatlas-theme');
+    const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.dataset.theme = saved === 'dark' || (saved !== 'light' && preferred) ? 'dark' : 'light';
+  })();
+</script>
+
 </head>
 <body>
+<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false">
+  <span id="theme-icon" aria-hidden="true">☾</span>
+  <span id="theme-text">Dark mode</span>
+</button>
+
 
 
   <!-- Scroll to Top Button -->
@@ -1982,7 +2093,7 @@ if (datasetsCanvas) {
         const value =
           chart.data.datasets[0].data[index];
 
-        ctx.fillStyle = "#444";
+        ctx.fillStyle = document.documentElement.dataset.theme === "dark" ? "#e2e4eb" : "#444";
         ctx.font = "bold 15px Arial";
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
@@ -2093,7 +2204,7 @@ if (datasetsCanvas) {
               weight: "bold"
             },
 
-            color: "#444"
+            color: document.documentElement.dataset.theme === "dark" ? "#d5d7e1" : "#444"
           }
         }
       }
@@ -2948,6 +3059,42 @@ if (datasetsCanvas) {
 </script>
 
 
+
+
+<script id="mammoatlas-theme-script">
+(function () {
+  const button = document.getElementById('theme-toggle');
+  const label = document.getElementById('theme-text');
+  const icon = document.getElementById('theme-icon');
+  function refreshCharts(isDark) {
+    if (!window.Chart) return;
+    Chart.defaults.color = isDark ? '#d5d7e1' : '#666666';
+    Chart.defaults.borderColor = isDark ? 'rgba(175,180,198,0.16)' : 'rgba(0,0,0,0.1)';
+    Object.values(Chart.instances).forEach(chart => {
+      Object.values(chart.options.scales || {}).forEach(scale => {
+        if (scale.ticks) scale.ticks.color = isDark ? '#d5d7e1' : '#666666';
+        if (scale.title) scale.title.color = isDark ? '#d5d7e1' : '#666666';
+        if (scale.grid) scale.grid.color = isDark ? 'rgba(175,180,198,0.16)' : 'rgba(0,0,0,0.1)';
+      });
+      chart.update();
+    });
+  }
+  function sync() {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    label.textContent = dark ? 'Light mode' : 'Dark mode';
+    icon.textContent = dark ? '☀' : '☾';
+    button.setAttribute('aria-pressed', String(dark));
+    refreshCharts(dark);
+  }
+  button.addEventListener('click', () => {
+    const dark = document.documentElement.dataset.theme !== 'dark';
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    localStorage.setItem('mammoatlas-theme', dark ? 'dark' : 'light');
+    sync();
+  });
+  sync();
+})();
+</script>
 
 </body>
 </html>
