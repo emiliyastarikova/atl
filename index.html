@@ -737,7 +737,7 @@ Annotation Examples JSON sample
   :root { color-scheme: light; }
   html[data-theme="dark"] { color-scheme: dark; }
   .theme-toggle {
-    position: fixed; top: 18px; right: 18px; z-index: 10000;
+    position: fixed; top: 18px; left: 18px; z-index: 10000;
     display: flex; align-items: center; gap: 9px; padding: 10px 16px;
     border: 1px solid #dedee5; border-radius: 999px;
     background: #fff; color: #24242b; font: 600 14px Inter, sans-serif;
@@ -827,14 +827,13 @@ Annotation Examples JSON sample
   html[data-theme="dark"] .dropdown-header h4 { color: #e8e9ef !important; }
   html[data-theme="dark"] .dicom-path-note { color: #afb2c0; }
   @media (max-width: 600px) {
-    .theme-toggle { top: 10px; right: 10px; padding: 8px 11px; font-size: 12px; }
+    .theme-toggle { top: 10px; left: 10px; padding: 8px 11px; font-size: 12px; }
   }
 </style>
 <script>
   (function () {
     const saved = localStorage.getItem('mammoatlas-theme');
-    const preferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.dataset.theme = saved === 'dark' || (saved !== 'light' && preferred) ? 'dark' : 'light';
+    document.documentElement.dataset.theme = saved === 'dark' ? 'dark' : 'light';
   })();
 </script>
 
