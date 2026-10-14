@@ -892,6 +892,21 @@ html[data-theme="dark"] .contour-number { color: #afb2c0; }
   })();
 </script>
 
+
+<style id="data-sources-table-styles">
+  .data-sources-table-wrapper { max-width: 850px; margin: 24px auto 0; overflow-x: auto; border: 1px solid #e6e6e6; border-radius: 10px; }
+  .data-sources-table { margin: 0 !important; background: #fff; }
+  .data-sources-table th, .data-sources-table td { padding: 16px 24px; vertical-align: middle; border-bottom: 1px solid #ececec; }
+  .data-sources-table th:first-child, .data-sources-table td:first-child { text-align: left; }
+  .data-sources-table th:nth-child(n+2), .data-sources-table td:nth-child(n+2) { text-align: center; }
+  .data-sources-table thead th { border-bottom: 2px solid #d6106e; }
+  .data-sources-table tfoot th { font-weight: 700; border-top: 2px solid #d6106e; border-bottom: none; }
+  html[data-theme="dark"] .data-sources-table-wrapper { border-color: #424653; }
+  html[data-theme="dark"] .data-sources-table, html[data-theme="dark"] .data-sources-table th, html[data-theme="dark"] .data-sources-table td { background: #20242e !important; color: #e9eaf0 !important; border-bottom-color: #424653; }
+  html[data-theme="dark"] .data-sources-table thead th { border-bottom-color: #d6106e; }
+  html[data-theme="dark"] .data-sources-table tfoot th { border-top-color: #d6106e; }
+  @media (max-width: 600px) { .data-sources-table th, .data-sources-table td { padding: 12px 10px; font-size: .9rem; } }
+</style>
 </head>
 <body>
 <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false">
@@ -1352,26 +1367,35 @@ function copyAnnotationJSON() {
 <!-- End JSON viewer -->
 
 
-<!-- Dataset histogram -->
+<!-- Data Sources -->
 <section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Data Sources</h2>
-        <div class="content">
-          <p>
-            Open licence sources with the corresponding full dicom mammography studies.
-          </p>
+  <div class="container is-fluid project-structure-container">
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <div class="has-text-centered">
+          <h2 class="title is-3">Data Sources</h2>
         </div>
-
-        <div style="position: relative; width: 100%; min-height: 420px;">
-          <canvas id="datasets" aria-label="Dataset class distribution"></canvas>
+        <div class="data-sources-table-wrapper">
+          <table class="table is-fullwidth data-sources-table" aria-label="Data sources: studies and images">
+            <thead>
+              <tr><th>Dataset</th><th>Studies</th><th>Images</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>CMMD</td><td>173</td><td>692</td></tr>
+              <tr><td>CSAW-CC</td><td>300</td><td>1200</td></tr>
+              <tr><td>LUMINA</td><td>100</td><td>400</td></tr>
+              <tr><td>NLBS</td><td>176</td><td>704</td></tr>
+            </tbody>
+            <tfoot>
+              <tr><th scope="row">TOTAL</th><th>749</th><th>2996</th></tr>
+            </tfoot>
+          </table>
         </div>
       </div>
     </div>
   </div>
 </section>
-<!-- End dataset histogram -->
+<!-- End Data Sources -->
 
 
 
@@ -2181,147 +2205,6 @@ if (ACRCanvas) {
 }
 
 
-// =====================================================
-// DATA SOURCES
-// =====================================================
-
-const datasetsCanvas = document.getElementById("datasets");
-
-if (datasetsCanvas) {
-
-  const valueLabels = {
-    id: "valueLabels",
-
-    afterDatasetsDraw(chart) {
-
-      const { ctx } = chart;
-      const meta = chart.getDatasetMeta(0);
-
-      ctx.save();
-
-      meta.data.forEach((bar, index) => {
-
-        const value =
-          chart.data.datasets[0].data[index];
-
-        ctx.fillStyle = document.documentElement.dataset.theme === "dark" ? "#e2e4eb" : "#444";
-        ctx.font = "bold 15px Arial";
-        ctx.textAlign = "left";
-        ctx.textBaseline = "middle";
-
-        ctx.fillText(
-          value,
-          bar.x + 10,
-          bar.y
-        );
-      });
-
-      ctx.restore();
-    }
-  };
-
-
-  new Chart(datasetsCanvas, {
-    type: "bar",
-
-    plugins: [
-      valueLabels
-    ],
-
-    data: {
-      labels: [
-        "NLBS",
-        "LUMINA",
-        "CMMD",
-        "CSAW-CC"
-      ],
-
-      datasets: [{
-        data: [
-          176,
-          100,
-          173,
-          300
-        ],
-
-        backgroundColor:
-          "rgba(190, 70, 120, 0.65)",
-
-        borderWidth: 0,
-
-        borderRadius: 10,
-        borderSkipped: false,
-
-        barThickness: 24
-      }]
-    },
-
-    options: {
-      indexAxis: "y",
-
-      responsive: true,
-      maintainAspectRatio: false,
-
-      layout: {
-        padding: {
-          right: 45
-        }
-      },
-
-      plugins: {
-        legend: {
-          display: false
-        },
-
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return context.raw + " studies";
-            }
-          }
-        }
-      },
-
-      scales: {
-        x: {
-          beginAtZero: true,
-          suggestedMax: 330,
-
-          grid: {
-            display: false
-          },
-
-          ticks: {
-            display: false
-          },
-
-          border: {
-            display: false
-          }
-        },
-
-        y: {
-          grid: {
-            display: false
-          },
-
-          border: {
-            display: false
-          },
-
-          ticks: {
-            font: {
-              size: 15,
-              weight: "bold"
-            },
-
-            color: document.documentElement.dataset.theme === "dark" ? "#d5d7e1" : "#444"
-          }
-        }
-      }
-    }
-  });
-}
 
 </script>
 
