@@ -1113,7 +1113,7 @@ html[data-theme="dark"] .contour-number { color: #afb2c0; }
 │   └── dicomseg
 ├── metadata/
 │   ├── mapping.csv
-│   ├── images.csv
+│   ├── dicom_metadata.csv
 │   └── biopsy.csv
 ├── annotation.json
 ├── croissant.json 
@@ -1125,39 +1125,44 @@ html[data-theme="dark"] .contour-number { color: #afb2c0; }
           <div class="project-structure-description content">
             <div class="project-structure-item">
               <p>
-                <strong>annotations/</strong> — pixel-level lesion annotations,
-                finding classifications, and links between corresponding findings
-                across mammographic views.
+                <strong>dicom/</strong> — mammography images stored in DICOM format 
+                and organized hierarchically by study/series/sop.
               </p>
             </div>
 
             <div class="project-structure-item">
               <p>
-                <strong>dicom_seg/</strong> — annotations represented in DICOM SEG
+                <strong>dicomseg/</strong> — annotations represented in DICOM SEG
                 format for visualization and use in radiological software.
               </p>
             </div>
 
             <div class="project-structure-item">
               <p>
-                <strong>metadata/</strong> — study- and image-level metadata, dataset
-                source information, and associated annotation information.
+                <strong>mapping.csv/</strong> — source data and associated annotation information.
               </p>
             </div>
 
             <div class="project-structure-item">
               <p>
-                <strong>scripts/</strong> — utilities for annotation processing,
-                format conversion, validation, and dataset preparation.
+                <strong>dicom_metadata.csv/</strong> — metadata extracted from selected DICOM tags.
               </p>
             </div>
 
             <div class="project-structure-item">
               <p>
-                <strong>README.md</strong> — documentation describing the resource,
-                its organization, annotation format, and usage instructions.
+                <strong>biopsy.csv</strong> — biopsy-related metadata containing available histopathological information
+                associated with each breast side.
               </p>
             </div>
+            <div class="project-structure-item">
+              <p>
+                <strong>annotation.json</strong> — COCO format annotation, including pixel-level segmentation contours 
+                for eight types of findings with associated attributes, 
+                as well as study-level BI-RADS, ACR breast density, and PGMI classifications.
+              </p>
+            </div>
+            
           </div>
         </div>
 
